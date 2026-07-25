@@ -1,0 +1,40 @@
+## .NET / C# ##
+bin/
+obj/
+*.user
+*.suo
+.vs/
+appsettings.Development.json
+appsettings.*.local.json
+*.pfx
+
+## EF Core secrets (user-secrets live outside the repo by default, but just in case) ##
+secrets.json
+
+## Node / React / Vite ##
+node_modules/
+dist/
+build/
+.vite/
+*.local
+
+## Environment / secrets ##
+.env
+.env.local
+.env.*.local
+
+## Docker ##
+docker-compose.override.yml
+
+## Logs ##
+*.log
+npm-debug.log*
+
+## OS / editor cruft ##
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+
+## Misc ##
+coverage/
