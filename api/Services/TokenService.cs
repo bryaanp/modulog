@@ -29,6 +29,44 @@ public sealed class TokenService(AppDbContext db, UserManager<AppUser> users, IO
 
     public async Task<TokenPair> IssueAsync(AppUser user, CancellationToken ct)
     {
+        var (pair, _) = await CreatePairAsync(user);
+        await db.SaveChangesAsync(ct);
+        return pair;
+    }
+
+    public async Task<TokenPair?> RotateAsync(string rawToken, CancellationToken ct)
+    {
+        var hash = Hash(rawToken);
+        await using var transaction = await db.Database.BeginTransactionAsync(ct);
+
+        // The row lock makes token consumption atomic. Concurrent requests for the same
+        // refresh token serialize here, and only the first can observe an active token.
+        var stored = await db.RefreshTokens
+            .FromSqlInterpolated($"SELECT * FROM refresh_tokens WHERE token_hash = {hash} FOR UPDATE")
+            .SingleOrDefaultAsync(ct);
+        if (stored is null || stored.RevokedAt is not null || stored.ExpiresAt <= DateTimeOffset.UtcNow)
+        {
+            await transaction.RollbackAsync(ct);
+            return null;
+        }
+
+        var user = await users.FindByIdAsync(stored.UserId.ToString());
+        if (user is null)
+        {
+            await transaction.RollbackAsync(ct);
+            return null;
+        }
+
+        stored.RevokedAt = DateTimeOffset.UtcNow;
+        var (pair, replacement) = await CreatePairAsync(user);
+        stored.ReplacedByTokenId = replacement.Id;
+        await db.SaveChangesAsync(ct);
+        await transaction.CommitAsync(ct);
+        return pair;
+    }
+
+    private async Task<(TokenPair Pair, RefreshToken StoredToken)> CreatePairAsync(AppUser user)
+    {
         var now = DateTimeOffset.UtcNow;
         var expiry = now.AddMinutes(_options.AccessTokenMinutes);
         var roles = await users.GetRolesAsync(user);
@@ -42,31 +80,14 @@ public sealed class TokenService(AppDbContext db, UserManager<AppUser> users, IO
         var token = new JwtSecurityToken(_options.Issuer, _options.Audience, claims, now.UtcDateTime, expiry.UtcDateTime,
             new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SigningKey)), SecurityAlgorithms.HmacSha256));
         var rawRefresh = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
-        db.RefreshTokens.Add(new RefreshToken { UserId = user.Id, TokenHash = Hash(rawRefresh), ExpiresAt = now.AddDays(_options.RefreshTokenDays) });
-        await db.SaveChangesAsync(ct);
-        return new TokenPair(new JwtSecurityTokenHandler().WriteToken(token), rawRefresh, expiry);
-    }
-
-    public async Task<TokenPair?> RotateAsync(string rawToken, CancellationToken ct)
-    {
-        var hash = Hash(rawToken);
-        var stored = await db.RefreshTokens.SingleOrDefaultAsync(x => x.TokenHash == hash, ct);
-        if (stored is null || stored.RevokedAt is not null || stored.ExpiresAt <= DateTimeOffset.UtcNow)
+        var stored = new RefreshToken
         {
-            return null;
-        }
-
-        var user = await users.FindByIdAsync(stored.UserId.ToString());
-        if (user is null)
-        {
-            return null;
-        }
-
-        stored.RevokedAt = DateTimeOffset.UtcNow;
-        var pair = await IssueAsync(user, ct);
-        stored.ReplacedByTokenId = await db.RefreshTokens.Where(x => x.TokenHash == Hash(pair.RefreshToken)).Select(x => x.Id).SingleAsync(ct);
-        await db.SaveChangesAsync(ct);
-        return pair;
+            UserId = user.Id,
+            TokenHash = Hash(rawRefresh),
+            ExpiresAt = now.AddDays(_options.RefreshTokenDays)
+        };
+        db.RefreshTokens.Add(stored);
+        return (new TokenPair(new JwtSecurityTokenHandler().WriteToken(token), rawRefresh, expiry), stored);
     }
 
     private static string Hash(string token) => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token)));

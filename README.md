@@ -39,11 +39,29 @@ dotnet user-secrets --project api set "OpenAI:ApiKey" "<your-key>"
 
 Production must override the connection string and JWT key using environment variables such as `ConnectionStrings__Default` and `Jwt__SigningKey`.
 
+The development CORS policy allows the Vite origin `http://localhost:5173`. Configure
+`Cors__AllowedOrigins__0` and subsequent indexed values for other deployed clients;
+do not use wildcard origins with authenticated APIs.
+
 ## Seed data and admin access
 
 The initial migration seeds the `leetcode` module plus Two Sum, Valid Parentheses, and Longest Substring Without Repeating Characters. Public registration creates the user's `user_modules` row automatically.
 
-Problem writes require the `admin` role. Phase 1 deliberately does not expose a public role-management endpoint. To bootstrap the first administrator, register normally and assign the role through a trusted maintenance script or database operation; never let clients select their own role.
+Problem writes require the `admin` role. Phase 1 deliberately does not expose a
+public role-management endpoint. To bootstrap the first administrator:
+
+1. Register the user normally.
+2. Stop the API.
+3. Configure the registered email and restart:
+
+   ```powershell
+   dotnet user-secrets --project api set "BootstrapAdmin:Email" "admin@example.com"
+   dotnet run --project api
+   ```
+
+The startup bootstrap creates the role when needed and only assigns it to the
+configured existing user. Remove the setting after the assignment; never let API
+clients select their own role.
 
 ## Authentication
 
@@ -60,7 +78,10 @@ Email infrastructure endpoints are `/api/v1/auth/email-verification-token` and `
 dotnet test Modulog.sln
 ```
 
-The unit tests cover the pure weak-topic scoring service. API integration tests against PostgreSQL are a recommended follow-up once the local Docker daemon is available.
+The test suite covers the pure weak-topic scoring service and the authentication,
+entry, refresh-token, and CORS flows against PostgreSQL. Integration tests require
+the Compose PostgreSQL service to be running. Each test uses and removes an isolated
+temporary schema, so development data is not modified.
 
 ## API summary
 

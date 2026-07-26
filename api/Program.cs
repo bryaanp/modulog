@@ -1,8 +1,10 @@
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -29,9 +31,13 @@ builder.Services.AddIdentityCore<AppUser>(o =>
     o.SignIn.RequireConfirmedEmail = false;
     o.Password.RequiredLength = 10;
     o.Password.RequireNonAlphanumeric = true;
+    o.Lockout.AllowedForNewUsers = true;
+    o.Lockout.MaxFailedAccessAttempts = 5;
+    o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 })
 .AddRoles<IdentityRole<Guid>>()
 .AddEntityFrameworkStores<AppDbContext>()
+.AddSignInManager()
 .AddDefaultTokenProviders();
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.Section));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
@@ -49,6 +55,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 builder.Services.AddAuthorization();
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+builder.Services.AddCors(options => options.AddPolicy("frontend", policy =>
+    policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod()));
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("auth", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0
+            }));
+});
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddSingleton<WeakTopicScorer>();
 builder.Services.AddScoped<RecommendationService>();
@@ -70,8 +92,11 @@ builder.Services.AddSwaggerGen(o =>
 });
 
 var app = builder.Build();
+await IdentityBootstrapper.ApplyAsync(app.Services, app.Configuration);
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseCors("frontend");
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
@@ -92,24 +117,30 @@ api.MapPost("/auth/register", async (RegisterRequest request, UserManager<AppUse
     db.UserModules.Add(new UserModule { UserId = user.Id, ModuleId = module.Id });
     await db.SaveChangesAsync(ct);
     return Results.Created($"/api/v1/users/{user.Id}", new { user.Id, user.Email, user.EmailConfirmed });
-}).AllowAnonymous();
+}).AllowAnonymous().RequireRateLimiting("auth");
 
-api.MapPost("/auth/login", async (LoginRequest request, UserManager<AppUser> users, TokenService tokens, CancellationToken ct) =>
+api.MapPost("/auth/login", async (LoginRequest request, UserManager<AppUser> users, SignInManager<AppUser> signIn, TokenService tokens, CancellationToken ct) =>
 {
     var user = await users.FindByEmailAsync(request.Email.Trim());
-    if (user is null || !await users.CheckPasswordAsync(user, request.Password))
+    if (user is null)
+    {
+        return Results.Problem("Invalid email or password.", statusCode: StatusCodes.Status401Unauthorized);
+    }
+
+    var signInResult = await signIn.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
+    if (!signInResult.Succeeded)
     {
         return Results.Problem("Invalid email or password.", statusCode: StatusCodes.Status401Unauthorized);
     }
 
     return Results.Ok(await tokens.IssueAsync(user, ct));
-}).AllowAnonymous();
+}).AllowAnonymous().RequireRateLimiting("auth");
 
 api.MapPost("/auth/refresh", async (RefreshRequest request, TokenService tokens, CancellationToken ct) =>
 {
     var pair = await tokens.RotateAsync(request.RefreshToken, ct);
     return pair is null ? Results.Problem("Refresh token is invalid or expired.", statusCode: 401) : Results.Ok(pair);
-}).AllowAnonymous();
+}).AllowAnonymous().RequireRateLimiting("auth");
 
 api.MapPost("/auth/email-verification-token", async (ClaimsPrincipal principal, UserManager<AppUser> users) =>
 {
