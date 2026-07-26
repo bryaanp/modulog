@@ -38,3 +38,6 @@ Thumbs.db
 
 ## Misc ##
 coverage/
+.dotnet-home/
+.appdata/
+.nuget-packages/
