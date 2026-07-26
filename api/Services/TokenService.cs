@@ -51,9 +51,17 @@ public sealed class TokenService(AppDbContext db, UserManager<AppUser> users, IO
     {
         var hash = Hash(rawToken);
         var stored = await db.RefreshTokens.SingleOrDefaultAsync(x => x.TokenHash == hash, ct);
-        if (stored is null || stored.RevokedAt is not null || stored.ExpiresAt <= DateTimeOffset.UtcNow) return null;
+        if (stored is null || stored.RevokedAt is not null || stored.ExpiresAt <= DateTimeOffset.UtcNow)
+        {
+            return null;
+        }
+
         var user = await users.FindByIdAsync(stored.UserId.ToString());
-        if (user is null) return null;
+        if (user is null)
+        {
+            return null;
+        }
+
         stored.RevokedAt = DateTimeOffset.UtcNow;
         var pair = await IssueAsync(user, ct);
         stored.ReplacedByTokenId = await db.RefreshTokens.Where(x => x.TokenHash == Hash(pair.RefreshToken)).Select(x => x.Id).SingleAsync(ct);

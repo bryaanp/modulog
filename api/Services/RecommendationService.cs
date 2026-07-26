@@ -16,7 +16,11 @@ public sealed class RecommendationService(AppDbContext db, WeakTopicScorer score
             .Select(x => JsonSerializer.Deserialize<LeetCodeEntryData>(x.Data)?.ProblemBankId)
             .OfType<Guid>().ToHashSet();
         var candidates = await db.ProblemBank.AsNoTracking().Where(x => !recentIds.Contains(x.Id)).ToListAsync(ct);
-        if (candidates.Count == 0) return null;
+        if (candidates.Count == 0)
+        {
+            return null;
+        }
+
         var weak = weaknesses.Take(3).Select((x, i) => (x.Topic, Weight: 3 - i)).ToDictionary(x => x.Topic, x => x.Weight);
         var attemptCount = entries.Count;
         var preferredDifficulty = attemptCount < 5 ? Difficulty.Easy : attemptCount < 20 ? Difficulty.Medium : Difficulty.Hard;

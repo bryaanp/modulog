@@ -32,8 +32,11 @@ public sealed class WeakTopicScorerTests
     private static Entry Entry(string topic, int minutes, int hints, int confidence, DateTimeOffset logged, DateTimeOffset? due) =>
         new()
         {
-            UserId = Guid.NewGuid(), ModuleId = Guid.NewGuid(), EntryType = "problem_attempt",
+            UserId = Guid.NewGuid(),
+            ModuleId = Guid.NewGuid(),
+            EntryType = "problem_attempt",
             Data = JsonSerializer.Serialize(new LeetCodeEntryData(Guid.NewGuid(), minutes, hints, confidence, [topic])),
-            LoggedAt = logged, ReviewDueAt = due
+            LoggedAt = logged,
+            ReviewDueAt = due
         };
 }

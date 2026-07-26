@@ -8,6 +8,7 @@ public sealed class AppUser : IdentityUser<Guid>
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 }
 
+#pragma warning disable CA1716 // "Module" is the ubiquitous domain term and maps directly to the modules table.
 public sealed class Module
 {
     public Guid Id { get; set; } = Guid.NewGuid();
@@ -15,6 +16,7 @@ public sealed class Module
     public required string Name { get; set; }
     public required string SchemaDefinition { get; set; }
 }
+#pragma warning restore CA1716
 
 public sealed class UserModule
 {
