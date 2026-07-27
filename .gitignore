@@ -16,6 +16,7 @@ node_modules/
 dist/
 build/
 .vite/
+.npm-cache/
 *.local
 
 ## Environment / secrets ##

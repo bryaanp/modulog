@@ -34,8 +34,86 @@ public sealed class SystemDesignService(HttpClient http, IConfiguration configur
             throw new InvalidOperationException("The AI provider could not generate a prompt.");
         }
 
+        string text;
+
+        try
+        {
+            text = ExtractOutputText(json);
+        }
+        catch (JsonException exception)
+        {
+            throw new InvalidOperationException(
+                "The AI provider returned an invalid response.",
+                exception);
+        }
+
+        return new
+        {
+            scenario = text,
+            weakTopicContext = context
+        };
+    }
+
+    private static string ExtractOutputText(string json)
+    {
         using var document = JsonDocument.Parse(json);
-        var text = document.RootElement.TryGetProperty("output_text", out var output) ? output.GetString() : json;
-        return new { scenario = text, weakTopicContext = context };
+        var root = document.RootElement;
+
+        if (!root.TryGetProperty("output", out var outputItems) ||
+            outputItems.ValueKind != JsonValueKind.Array)
+        {
+            throw new InvalidOperationException(
+                "The AI provider response did not contain an output array.");
+        }
+
+        var textSegments = new List<string>();
+
+        // Responses may include reasoning or tool-call items, so only process messages.
+        foreach (var outputItem in outputItems.EnumerateArray())
+        {
+            if (!outputItem.TryGetProperty("type", out var itemType) ||
+                itemType.ValueKind != JsonValueKind.String ||
+                itemType.GetString() != "message")
+            {
+                continue;
+            }
+
+            if (!outputItem.TryGetProperty("content", out var contentItems) ||
+                contentItems.ValueKind != JsonValueKind.Array)
+            {
+                continue;
+            }
+
+            foreach (var contentItem in contentItems.EnumerateArray())
+            {
+                if (!contentItem.TryGetProperty("type", out var contentType) ||
+                    contentType.ValueKind != JsonValueKind.String ||
+                    contentType.GetString() != "output_text")
+                {
+                    continue;
+                }
+
+                if (!contentItem.TryGetProperty("text", out var textElement) ||
+                    textElement.ValueKind != JsonValueKind.String)
+                {
+                    continue;
+                }
+
+                var segment = textElement.GetString();
+
+                if (!string.IsNullOrWhiteSpace(segment))
+                {
+                    textSegments.Add(segment);
+                }
+            }
+        }
+
+        if (textSegments.Count == 0)
+        {
+            throw new InvalidOperationException(
+                "The AI provider response did not contain generated text.");
+        }
+
+        return string.Join(Environment.NewLine, textSegments);
     }
 }

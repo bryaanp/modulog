@@ -1,6 +1,8 @@
 # Modulog
 
-Modulog is a modular personal tracking API. Phase 1 implements the LeetCode/interview-prep module; the React client is intentionally deferred to the next milestone. The original requirements remain in [`modulog-referenceprompt.md`](modulog-referenceprompt.md).
+Modulog is a modular personal tracking application. Phase 1 implements the
+LeetCode/interview-prep API and its React client. The original requirements
+remain in [`modulog-referenceprompt.md`](modulog-referenceprompt.md).
 
 ## Phase 1 architecture
 
@@ -30,6 +32,18 @@ dotnet run --project api
 
 Swagger UI is available at the URL printed by `dotnet run`, under `/swagger`. The health check is `/health`; every application route begins with `/api/v1/`.
 
+Start the React client in a second terminal:
+
+```powershell
+cd client
+npm.cmd install
+npm.cmd run dev
+```
+
+The client is normally available at `http://localhost:5173`. A beginner-focused
+code and architecture walkthrough is available in
+[`docs/frontend-guide.md`](docs/frontend-guide.md).
+
 Development database settings are committed for local use only. Configure secrets without committing them:
 
 ```powershell
@@ -45,7 +59,11 @@ do not use wildcard origins with authenticated APIs.
 
 ## Seed data and admin access
 
-The initial migration seeds the `leetcode` module plus Two Sum, Valid Parentheses, and Longest Substring Without Repeating Characters. Public registration creates the user's `user_modules` row automatically.
+The migrations seed the `leetcode` module and the complete NeetCode 150 problem
+catalog. Catalog metadata, deterministic identifiers, and regeneration
+instructions are documented in
+[`docs/problem-catalog.md`](docs/problem-catalog.md). Public registration creates
+the user's `user_modules` row automatically.
 
 Problem writes require the `admin` role. Phase 1 deliberately does not expose a
 public role-management endpoint. To bootstrap the first administrator:
@@ -92,3 +110,8 @@ temporary schema, so development data is not modified.
 - System design: generate a prompt through OpenAI
 
 The scoring weights are centralized in `WeakTopicScorer` so they can be tuned without endpoint changes.
+
+## Project backlog
+
+Planned work that is not part of the completed milestone is tracked in
+[`TODO.md`](TODO.md).

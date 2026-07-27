@@ -77,6 +77,30 @@ public sealed class ApiIntegrationTests : IAsyncLifetime
             new AuthenticationHeaderValue("Bearer", tokens.AccessToken);
 
         var problems = await _client.GetFromJsonAsync<JsonElement>("/api/v1/problems");
+        Assert.Equal(150, problems.GetArrayLength());
+        Assert.Equal(
+            150,
+            problems
+                .EnumerateArray()
+                .Select(problem => problem.GetProperty("externalUrl").GetString())
+                .Distinct()
+                .Count());
+        Assert.Equal(
+            28,
+            problems
+                .EnumerateArray()
+                .Count(problem => problem.GetProperty("difficulty").GetString() == "Easy"));
+        Assert.Equal(
+            101,
+            problems
+                .EnumerateArray()
+                .Count(problem => problem.GetProperty("difficulty").GetString() == "Medium"));
+        Assert.Equal(
+            21,
+            problems
+                .EnumerateArray()
+                .Count(problem => problem.GetProperty("difficulty").GetString() == "Hard"));
+
         var problemId = problems[0].GetProperty("id").GetGuid();
         var entryResponse = await _client.PostAsJsonAsync(
             "/api/v1/entries",
