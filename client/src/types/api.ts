@@ -17,6 +17,7 @@ export interface Problem {
   title: string
   externalUrl: string
   topicTags: string[]
+  companies: string[]
   difficulty: Difficulty
   createdAt: string
 }
@@ -25,6 +26,7 @@ export interface ProblemInput {
   title: string
   externalUrl: string
   topicTags: string[]
+  companies: string[]
   difficulty: Difficulty
 }
 

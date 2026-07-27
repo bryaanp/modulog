@@ -25,9 +25,21 @@ export function AuthProvider({ children }: PropsWithChildren) {
     return tokens.accessToken
   }, [])
 
-  const logout = useCallback(() => {
-    sessionStorage.removeItem(refreshTokenKey)
-    setSession(null)
+  const logout = useCallback(async () => {
+    const refreshToken = sessionStorage.getItem(refreshTokenKey)
+
+    try {
+      if (refreshToken) {
+        await fetch(apiUrl('/api/v1/auth/logout'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refreshToken }),
+        })
+      }
+    } finally {
+      sessionStorage.removeItem(refreshTokenKey)
+      setSession(null)
+    }
   }, [])
 
   const refresh = useCallback(async () => {

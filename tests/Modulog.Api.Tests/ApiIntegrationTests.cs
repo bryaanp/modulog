@@ -77,29 +77,30 @@ public sealed class ApiIntegrationTests : IAsyncLifetime
             new AuthenticationHeaderValue("Bearer", tokens.AccessToken);
 
         var problems = await _client.GetFromJsonAsync<JsonElement>("/api/v1/problems");
-        Assert.Equal(150, problems.GetArrayLength());
+        Assert.Equal(212, problems.GetArrayLength());
         Assert.Equal(
-            150,
+            212,
             problems
                 .EnumerateArray()
                 .Select(problem => problem.GetProperty("externalUrl").GetString())
                 .Distinct()
                 .Count());
+        Assert.Contains(
+            problems.EnumerateArray(),
+            problem => problem.GetProperty("externalUrl").GetString()
+                == "https://leetcode.com/problems/bus-routes/");
         Assert.Equal(
-            28,
+            95,
             problems
                 .EnumerateArray()
-                .Count(problem => problem.GetProperty("difficulty").GetString() == "Easy"));
-        Assert.Equal(
-            101,
-            problems
-                .EnumerateArray()
-                .Count(problem => problem.GetProperty("difficulty").GetString() == "Medium"));
-        Assert.Equal(
-            21,
-            problems
-                .EnumerateArray()
-                .Count(problem => problem.GetProperty("difficulty").GetString() == "Hard"));
+                .Count(problem => problem
+                    .GetProperty("companies")
+                    .EnumerateArray()
+                    .Any(company => company.GetString() == "Amazon")));
+
+        var amazonProblems =
+            await _client.GetFromJsonAsync<JsonElement>("/api/v1/problems?company=Amazon");
+        Assert.Equal(95, amazonProblems.GetArrayLength());
 
         var problemId = problems[0].GetProperty("id").GetGuid();
         var entryResponse = await _client.PostAsJsonAsync(
@@ -137,6 +138,17 @@ public sealed class ApiIntegrationTests : IAsyncLifetime
         Assert.Equal(
             [HttpStatusCode.OK, HttpStatusCode.Unauthorized],
             rotations.Select(response => response.StatusCode).Order().ToArray());
+
+        var logoutTokens = await LoginAsync(email, password);
+        var logoutResponse = await _client.PostAsJsonAsync(
+            "/api/v1/auth/logout",
+            new { refreshToken = logoutTokens.RefreshToken });
+        Assert.Equal(HttpStatusCode.NoContent, logoutResponse.StatusCode);
+
+        var loggedOutRefreshResponse = await _client.PostAsJsonAsync(
+            "/api/v1/auth/refresh",
+            new { refreshToken = logoutTokens.RefreshToken });
+        Assert.Equal(HttpStatusCode.Unauthorized, loggedOutRefreshResponse.StatusCode);
     }
 
     [Fact]

@@ -12,6 +12,7 @@ export function ProblemsPage() {
   const { request } = useAuth()
   const [search, setSearch] = useState('')
   const [topic, setTopic] = useState('')
+  const [company, setCompany] = useState('')
   const [difficulty, setDifficulty] = useState<Difficulty | ''>('')
   const problems = useQuery({
     queryKey: ['problems'],
@@ -23,15 +24,21 @@ export function ProblemsPage() {
       [...new Set(problems.data?.flatMap((problem) => problem.topicTags) ?? [])].sort(),
     [problems.data],
   )
+  const companies = useMemo(
+    () =>
+      [...new Set(problems.data?.flatMap((problem) => problem.companies) ?? [])].sort(),
+    [problems.data],
+  )
   const filtered = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase()
     return problems.data?.filter(
       (problem) =>
         (!normalizedSearch || problem.title.toLowerCase().includes(normalizedSearch)) &&
         (!topic || problem.topicTags.includes(topic)) &&
+        (!company || problem.companies.includes(company)) &&
         (!difficulty || problem.difficulty === difficulty),
     )
-  }, [difficulty, problems.data, search, topic])
+  }, [company, difficulty, problems.data, search, topic])
 
   return (
     <div className="page">
@@ -63,6 +70,18 @@ export function ProblemsPage() {
           ))}
         </select>
         <select
+          aria-label="Filter by company"
+          value={company}
+          onChange={(event) => setCompany(event.target.value)}
+        >
+          <option value="">All companies</option>
+          {companies.map((value) => (
+            <option key={value} value={value}>
+              {value}
+            </option>
+          ))}
+        </select>
+        <select
           aria-label="Filter by difficulty"
           value={difficulty}
           onChange={(event) => setDifficulty(event.target.value as Difficulty | '')}
@@ -86,11 +105,18 @@ export function ProblemsPage() {
         {filtered?.map((problem) => (
           <article className="problem-card" key={problem.id}>
             <div className="problem-card-top">
-              <span
-                className={`difficulty difficulty-${problem.difficulty.toLowerCase()}`}
-              >
-                {problem.difficulty}
-              </span>
+              <div className="badge-list">
+                <span
+                  className={`difficulty difficulty-${problem.difficulty.toLowerCase()}`}
+                >
+                  {problem.difficulty}
+                </span>
+                {problem.companies.map((value) => (
+                  <span className="company-badge" key={value}>
+                    {value}
+                  </span>
+                ))}
+              </div>
               <a
                 href={problem.externalUrl}
                 target="_blank"

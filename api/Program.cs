@@ -136,6 +136,15 @@ api.MapPost("/auth/login", async (LoginRequest request, UserManager<AppUser> use
     return Results.Ok(await tokens.IssueAsync(user, ct));
 }).AllowAnonymous().RequireRateLimiting("auth");
 
+api.MapPost("/auth/logout", async (
+    RefreshRequest request,
+    TokenService tokens,
+    CancellationToken ct) =>
+{
+    await tokens.RevokeAsync(request.RefreshToken, ct);
+    return Results.NoContent();
+}).AllowAnonymous();
+
 api.MapPost("/auth/refresh", async (RefreshRequest request, TokenService tokens, CancellationToken ct) =>
 {
     var pair = await tokens.RotateAsync(request.RefreshToken, ct);
@@ -167,7 +176,7 @@ api.MapPost("/auth/verify-email", async (VerifyEmailRequest request, UserManager
 }).AllowAnonymous();
 
 var problems = api.MapGroup("/problems");
-problems.MapGet("/", async (string? topic, Difficulty? difficulty, AppDbContext db, CancellationToken ct) =>
+problems.MapGet("/", async (string? topic, string? company, Difficulty? difficulty, AppDbContext db, CancellationToken ct) =>
 {
     var query = db.ProblemBank.AsNoTracking();
     if (!string.IsNullOrWhiteSpace(topic))
@@ -178,6 +187,11 @@ problems.MapGet("/", async (string? topic, Difficulty? difficulty, AppDbContext 
     if (difficulty is not null)
     {
         query = query.Where(x => x.Difficulty == difficulty);
+    }
+
+    if (!string.IsNullOrWhiteSpace(company))
+    {
+        query = query.Where(x => x.Companies.Contains(company.Trim()));
     }
 
     return Results.Ok(await query.OrderBy(x => x.Title).ToListAsync(ct));
@@ -199,8 +213,13 @@ problems.MapPut("/{id:guid}", async (Guid id, ProblemRequest request, AppDbConte
         return Results.NotFound();
     }
 
-    p.Title = request.Title.Trim(); p.ExternalUrl = request.ExternalUrl; p.TopicTags = request.TopicTags.Select(x => x.Trim().ToLowerInvariant()).Distinct().ToArray(); p.Difficulty = request.Difficulty;
-    await db.SaveChangesAsync(ct); return Results.Ok(p);
+    p.Title = request.Title.Trim();
+    p.ExternalUrl = request.ExternalUrl;
+    p.TopicTags = request.NormalizedTopicTags();
+    p.Companies = request.NormalizedCompanies();
+    p.Difficulty = request.Difficulty;
+    await db.SaveChangesAsync(ct);
+    return Results.Ok(p);
 }).RequireAuthorization(p => p.RequireRole("admin"));
 problems.MapDelete("/{id:guid}", async (Guid id, AppDbContext db, CancellationToken ct) =>
 {
@@ -277,9 +296,35 @@ sealed record RegisterRequest(string Email, string Password);
 sealed record LoginRequest(string Email, string Password);
 sealed record RefreshRequest(string RefreshToken);
 sealed record VerifyEmailRequest(Guid UserId, string Token);
-sealed record ProblemRequest(string Title, string ExternalUrl, string[] TopicTags, Difficulty Difficulty)
+sealed record ProblemRequest(
+    string Title,
+    string ExternalUrl,
+    string[] TopicTags,
+    string[]? Companies,
+    Difficulty Difficulty)
 {
-    public Problem ToEntity() => new() { Title = Title.Trim(), ExternalUrl = ExternalUrl, TopicTags = TopicTags.Select(x => x.Trim().ToLowerInvariant()).Distinct().ToArray(), Difficulty = Difficulty };
+    public Problem ToEntity() => new()
+    {
+        Title = Title.Trim(),
+        ExternalUrl = ExternalUrl,
+        TopicTags = NormalizedTopicTags(),
+        Companies = NormalizedCompanies(),
+        Difficulty = Difficulty
+    };
+
+    public string[] NormalizedTopicTags() =>
+        TopicTags
+            .Select(x => x.Trim().ToLowerInvariant())
+            .Where(x => x.Length > 0)
+            .Distinct()
+            .ToArray();
+
+    public string[] NormalizedCompanies() =>
+        (Companies ?? [])
+            .Select(x => x.Trim())
+            .Where(x => x.Length > 0)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
 }
 sealed record CreateEntryRequest(Guid ProblemBankId, int TimeSpentMinutes, int HintsUsed, int? SelfRatedConfidence, DateTimeOffset? ReviewDueAt, DateTimeOffset? LoggedAt);
 sealed record SystemDesignRequest(string? WeakTopic, string? Level);

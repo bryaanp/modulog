@@ -76,6 +76,9 @@ export function PracticePage() {
               {problems.data.map((problem) => (
                 <option key={problem.id} value={problem.id}>
                   {problem.title} · {problem.difficulty}
+                  {problem.companies.length > 0
+                    ? ` · ${problem.companies.join(', ')}`
+                    : ''}
                 </option>
               ))}
             </select>

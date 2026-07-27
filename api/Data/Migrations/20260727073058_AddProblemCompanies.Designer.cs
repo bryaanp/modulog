@@ -2,19 +2,22 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Modulog.Api.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Modulog.Api.Data.Migrations
+namespace Modulog.Api.Data.Migrations;
+
+[DbContext(typeof(AppDbContext))]
+[Migration("20260727073058_AddProblemCompanies")]
+partial class AddProblemCompanies
 {
-    [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    /// <inheritdoc />
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
-        {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.11")
@@ -2706,6 +2709,5 @@ namespace Modulog.Api.Data.Migrations
                         .HasConstraintName("fk_user_modules_users_user_id");
                 });
 #pragma warning restore 612, 618
-        }
     }
 }

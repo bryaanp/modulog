@@ -34,6 +34,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
             e.ToTable("problem_bank");
             e.HasIndex(x => x.ExternalUrl).IsUnique();
             e.Property(x => x.TopicTags).HasColumnType("text[]");
+            e.Property(x => x.Companies).HasColumnType("text[]");
             e.Property(x => x.Difficulty).HasConversion<string>();
         });
         builder.Entity<RefreshToken>(e => { e.ToTable("refresh_tokens"); e.HasIndex(x => x.TokenHash).IsUnique(); e.HasIndex(x => new { x.UserId, x.ExpiresAt }); e.HasOne<AppUser>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade); });
@@ -45,6 +46,6 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
             Name = "LeetCode",
             SchemaDefinition = """{"problem_attempt":{"problem_bank_id":"uuid","time_spent_minutes":"integer","hints_used":"integer","self_rated_confidence":"integer|null","topic_tags":"string[]"}}"""
         });
-        builder.Entity<Problem>().HasData(NeetCodeCatalog.Problems);
+        builder.Entity<Problem>().HasData(LeetCodeCatalog.Problems);
     }
 }

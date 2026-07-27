@@ -11,6 +11,7 @@ const emptyProblem: ProblemInput = {
   title: '',
   externalUrl: '',
   topicTags: [],
+  companies: [],
   difficulty: 'Easy',
 }
 
@@ -19,6 +20,7 @@ export function AdminProblemsPage() {
   const queryClient = useQueryClient()
   const [form, setForm] = useState<ProblemInput>(emptyProblem)
   const [tags, setTags] = useState('')
+  const [companies, setCompanies] = useState('')
   const problems = useQuery({
     queryKey: ['problems'],
     queryFn: () => request<Problem[]>('/api/v1/problems'),
@@ -32,6 +34,7 @@ export function AdminProblemsPage() {
     onSuccess: async () => {
       setForm(emptyProblem)
       setTags('')
+      setCompanies('')
       await queryClient.invalidateQueries({ queryKey: ['problems'] })
     },
   })
@@ -52,6 +55,10 @@ export function AdminProblemsPage() {
       topicTags: tags
         .split(',')
         .map((tag) => tag.trim())
+        .filter(Boolean),
+      companies: companies
+        .split(',')
+        .map((company) => company.trim())
         .filter(Boolean),
     })
   }
@@ -103,6 +110,15 @@ export function AdminProblemsPage() {
             <span className="field-help">Separate tags with commas.</span>
           </label>
           <label>
+            Companies
+            <input
+              placeholder="Amazon, Google"
+              value={companies}
+              onChange={(event) => setCompanies(event.target.value)}
+            />
+            <span className="field-help">Optional. Separate companies with commas.</span>
+          </label>
+          <label>
             Difficulty
             <select
               value={form.difficulty}
@@ -131,7 +147,11 @@ export function AdminProblemsPage() {
               <div>
                 <strong>{problem.title}</strong>
                 <span>
-                  {problem.difficulty} · {problem.topicTags.join(', ')}
+                  {problem.difficulty} ·{' '}
+                  {problem.companies.length > 0
+                    ? `${problem.companies.join(', ')} · `
+                    : ''}
+                  {problem.topicTags.join(', ')}
                 </span>
               </div>
               <button

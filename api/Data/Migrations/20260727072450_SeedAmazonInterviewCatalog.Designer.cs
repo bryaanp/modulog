@@ -2,19 +2,22 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Modulog.Api.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Modulog.Api.Data.Migrations
+namespace Modulog.Api.Data.Migrations;
+
+[DbContext(typeof(AppDbContext))]
+[Migration("20260727072450_SeedAmazonInterviewCatalog")]
+partial class SeedAmazonInterviewCatalog
 {
-    [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    /// <inheritdoc />
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
-        {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.11")
@@ -362,11 +365,6 @@ namespace Modulog.Api.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string[]>("Companies")
-                        .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasColumnName("companies");
-
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
@@ -404,7 +402,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("20000000-0000-0000-0000-000000000001"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/two-sum/",
@@ -414,7 +411,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000002"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/add-two-numbers/",
@@ -424,7 +420,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("20000000-0000-0000-0000-000000000003"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
@@ -434,7 +429,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000004"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/median-of-two-sorted-arrays/",
@@ -444,7 +438,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000005"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/longest-palindromic-substring/",
@@ -454,7 +447,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000007"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/reverse-integer/",
@@ -464,7 +456,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000010"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/regular-expression-matching/",
@@ -474,7 +465,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000011"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/container-with-most-water/",
@@ -484,7 +474,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000015"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/3sum/",
@@ -494,7 +483,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000017"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/letter-combinations-of-a-phone-number/",
@@ -504,7 +492,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000019"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
@@ -514,7 +501,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("20000000-0000-0000-0000-000000000002"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/valid-parentheses/",
@@ -524,7 +510,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000021"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/merge-two-sorted-lists/",
@@ -534,7 +519,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000022"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/generate-parentheses/",
@@ -544,7 +528,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000023"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/merge-k-sorted-lists/",
@@ -554,7 +537,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000025"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/reverse-nodes-in-k-group/",
@@ -564,7 +546,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000031"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/next-permutation/",
@@ -574,7 +555,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000032"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/longest-valid-parentheses/",
@@ -584,7 +564,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000033"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/search-in-rotated-sorted-array/",
@@ -594,7 +573,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000036"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/valid-sudoku/",
@@ -604,7 +582,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000039"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/combination-sum/",
@@ -614,7 +591,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000040"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/combination-sum-ii/",
@@ -624,7 +600,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000041"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/first-missing-positive/",
@@ -634,7 +609,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000042"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/trapping-rain-water/",
@@ -644,7 +618,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000043"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/multiply-strings/",
@@ -654,7 +627,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000045"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/jump-game-ii/",
@@ -664,7 +636,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000046"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/permutations/",
@@ -674,7 +645,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000048"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/rotate-image/",
@@ -684,7 +654,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000049"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/group-anagrams/",
@@ -694,7 +663,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000050"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/powx-n/",
@@ -704,7 +672,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000051"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/n-queens/",
@@ -714,7 +681,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000053"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/maximum-subarray/",
@@ -724,7 +690,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000054"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/spiral-matrix/",
@@ -734,7 +699,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000055"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/jump-game/",
@@ -744,7 +708,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000056"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/merge-intervals/",
@@ -754,7 +717,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000057"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/insert-interval/",
@@ -764,7 +726,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000062"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/unique-paths/",
@@ -774,7 +735,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000064"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/minimum-path-sum/",
@@ -784,7 +744,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000066"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/plus-one/",
@@ -794,7 +753,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000070"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/climbing-stairs/",
@@ -804,7 +762,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000072"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/edit-distance/",
@@ -814,7 +771,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000073"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/set-matrix-zeroes/",
@@ -824,7 +780,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000074"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/search-a-2d-matrix/",
@@ -834,7 +789,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000075"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/sort-colors/",
@@ -844,7 +798,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000076"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/minimum-window-substring/",
@@ -854,7 +807,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000078"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/subsets/",
@@ -864,7 +816,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000079"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/word-search/",
@@ -874,7 +825,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000084"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/largest-rectangle-in-histogram/",
@@ -884,7 +834,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000090"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/subsets-ii/",
@@ -894,7 +843,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000091"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/decode-ways/",
@@ -904,7 +852,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000097"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/interleaving-string/",
@@ -914,7 +861,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000098"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/validate-binary-search-tree/",
@@ -924,7 +870,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000100"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/same-tree/",
@@ -934,7 +879,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000102"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/binary-tree-level-order-traversal/",
@@ -944,7 +888,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000104"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/maximum-depth-of-binary-tree/",
@@ -954,7 +897,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000105"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
@@ -964,7 +906,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000110"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/balanced-binary-tree/",
@@ -974,7 +915,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000115"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/distinct-subsequences/",
@@ -984,7 +924,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000121"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
@@ -994,7 +933,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000122"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/",
@@ -1004,7 +942,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000124"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
@@ -1014,7 +951,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000125"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/valid-palindrome/",
@@ -1024,7 +960,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000127"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/word-ladder/",
@@ -1034,7 +969,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000128"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/longest-consecutive-sequence/",
@@ -1044,7 +978,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000130"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/surrounded-regions/",
@@ -1054,7 +987,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000131"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/palindrome-partitioning/",
@@ -1064,7 +996,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000133"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/clone-graph/",
@@ -1074,7 +1005,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000134"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/gas-station/",
@@ -1084,7 +1014,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000136"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/single-number/",
@@ -1094,7 +1023,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000138"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/copy-list-with-random-pointer/",
@@ -1104,7 +1032,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000139"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/word-break/",
@@ -1114,7 +1041,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000140"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/word-break-ii/",
@@ -1124,7 +1050,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000141"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/linked-list-cycle/",
@@ -1134,7 +1059,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000143"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/reorder-list/",
@@ -1144,7 +1068,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000146"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/lru-cache/",
@@ -1154,7 +1077,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000148"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/sort-list/",
@@ -1164,7 +1086,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000150"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/evaluate-reverse-polish-notation/",
@@ -1174,7 +1095,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000152"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/maximum-product-subarray/",
@@ -1184,7 +1104,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000153"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
@@ -1194,7 +1113,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000155"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/min-stack/",
@@ -1204,7 +1122,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000167"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/",
@@ -1214,7 +1131,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000190"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/reverse-bits/",
@@ -1224,7 +1140,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000191"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/number-of-1-bits/",
@@ -1234,7 +1149,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000198"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/house-robber/",
@@ -1244,7 +1158,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000199"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/binary-tree-right-side-view/",
@@ -1254,7 +1167,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000200"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/number-of-islands/",
@@ -1264,7 +1176,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000202"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/happy-number/",
@@ -1274,7 +1185,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000206"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/reverse-linked-list/",
@@ -1284,7 +1194,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000207"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/course-schedule/",
@@ -1294,7 +1203,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000208"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/implement-trie-prefix-tree/",
@@ -1304,7 +1212,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000210"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/course-schedule-ii/",
@@ -1314,7 +1221,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000211"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/design-add-and-search-words-data-structure/",
@@ -1324,7 +1230,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000212"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/word-search-ii/",
@@ -1334,7 +1239,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000213"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/house-robber-ii/",
@@ -1344,7 +1248,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000215"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/kth-largest-element-in-an-array/",
@@ -1354,7 +1257,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000217"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/contains-duplicate/",
@@ -1364,7 +1266,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000224"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/basic-calculator/",
@@ -1374,7 +1275,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000226"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/invert-binary-tree/",
@@ -1384,7 +1284,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000230"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
@@ -1394,7 +1293,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000235"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
@@ -1404,7 +1302,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000238"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/product-of-array-except-self/",
@@ -1414,7 +1311,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000239"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/sliding-window-maximum/",
@@ -1424,7 +1320,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000242"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/valid-anagram/",
@@ -1434,7 +1329,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000250"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/count-univalue-subtrees/",
@@ -1444,7 +1338,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000252"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/meeting-rooms/",
@@ -1454,7 +1347,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000253"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/meeting-rooms-ii/",
@@ -1464,7 +1356,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000261"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/graph-valid-tree/",
@@ -1474,7 +1365,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000268"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/missing-number/",
@@ -1484,7 +1374,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000269"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/alien-dictionary/",
@@ -1494,7 +1383,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000271"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/encode-and-decode-strings/",
@@ -1504,7 +1392,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000272"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/closest-binary-search-tree-value-ii/",
@@ -1514,7 +1401,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000273"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/integer-to-english-words/",
@@ -1524,7 +1410,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000277"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/find-the-celebrity/",
@@ -1534,7 +1419,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000286"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/walls-and-gates/",
@@ -1544,7 +1428,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000287"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/find-the-duplicate-number/",
@@ -1554,7 +1437,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000295"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/find-median-from-data-stream/",
@@ -1564,7 +1446,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000297"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
@@ -1574,7 +1455,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000300"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/longest-increasing-subsequence/",
@@ -1584,7 +1464,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000309"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/",
@@ -1594,7 +1473,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000312"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/burst-balloons/",
@@ -1604,7 +1482,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000316"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/remove-duplicate-letters/",
@@ -1614,7 +1491,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000322"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/coin-change/",
@@ -1624,7 +1500,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000323"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/",
@@ -1634,7 +1509,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000329"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/longest-increasing-path-in-a-matrix/",
@@ -1644,7 +1518,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000332"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/reconstruct-itinerary/",
@@ -1654,7 +1527,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000337"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/house-robber-iii/",
@@ -1664,7 +1536,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000338"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/counting-bits/",
@@ -1674,7 +1545,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000340"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/",
@@ -1684,7 +1554,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000347"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/top-k-frequent-elements/",
@@ -1694,7 +1563,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000355"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/design-twitter/",
@@ -1704,7 +1572,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000371"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/sum-of-two-integers/",
@@ -1714,7 +1581,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000380"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/insert-delete-getrandom-o1/",
@@ -1724,7 +1590,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000381"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/insert-delete-getrandom-o1-duplicates-allowed/",
@@ -1734,7 +1599,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000399"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/evaluate-division/",
@@ -1744,7 +1608,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000402"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/remove-k-digits/",
@@ -1754,7 +1617,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000416"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/partition-equal-subset-sum/",
@@ -1764,7 +1626,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000417"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/pacific-atlantic-water-flow/",
@@ -1774,7 +1635,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000424"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/longest-repeating-character-replacement/",
@@ -1784,7 +1644,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000432"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/all-oone-data-structure/",
@@ -1794,7 +1653,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000435"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/non-overlapping-intervals/",
@@ -1804,7 +1662,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000460"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/lfu-cache/",
@@ -1814,7 +1671,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000472"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/concatenated-words/",
@@ -1824,7 +1680,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000475"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/heaters/",
@@ -1834,7 +1689,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000494"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/target-sum/",
@@ -1844,7 +1698,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000518"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/coin-change-ii/",
@@ -1854,7 +1707,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000528"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/random-pick-with-weight/",
@@ -1864,7 +1716,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000543"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/diameter-of-binary-tree/",
@@ -1874,7 +1725,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000567"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/permutation-in-string/",
@@ -1884,7 +1734,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000572"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/subtree-of-another-tree/",
@@ -1894,7 +1743,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000621"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/task-scheduler/",
@@ -1904,7 +1752,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000647"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/palindromic-substrings/",
@@ -1914,7 +1761,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000662"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/maximum-width-of-binary-tree/",
@@ -1924,7 +1770,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000678"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/valid-parenthesis-string/",
@@ -1934,7 +1779,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000684"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/redundant-connection/",
@@ -1944,7 +1788,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000692"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/top-k-frequent-words/",
@@ -1954,7 +1797,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000695"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/max-area-of-island/",
@@ -1964,7 +1806,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000703"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/kth-largest-element-in-a-stream/",
@@ -1974,7 +1815,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000704"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/binary-search/",
@@ -1984,7 +1824,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000716"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/max-stack/",
@@ -1994,7 +1833,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000735"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/asteroid-collision/",
@@ -2004,7 +1842,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000739"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/daily-temperatures/",
@@ -2014,7 +1851,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000743"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/network-delay-time/",
@@ -2024,7 +1860,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000746"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/min-cost-climbing-stairs/",
@@ -2034,7 +1869,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000763"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/partition-labels/",
@@ -2044,7 +1878,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000767"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/reorganize-string/",
@@ -2054,7 +1887,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000774"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/minimize-max-distance-to-gas-station/",
@@ -2064,7 +1896,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000778"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/swim-in-rising-water/",
@@ -2074,7 +1905,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000787"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/cheapest-flights-within-k-stops/",
@@ -2084,7 +1914,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000802"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/find-eventual-safe-states/",
@@ -2094,7 +1923,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000815"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/bus-routes/",
@@ -2104,7 +1932,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000827"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/making-a-large-island/",
@@ -2114,7 +1941,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000841"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/keys-and-rooms/",
@@ -2124,7 +1950,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000846"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/hand-of-straights/",
@@ -2134,7 +1959,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000853"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/car-fleet/",
@@ -2144,7 +1968,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000863"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/",
@@ -2154,7 +1977,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000875"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/koko-eating-bananas/",
@@ -2164,7 +1986,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000881"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/boats-to-save-people/",
@@ -2174,7 +1995,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000901"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/online-stock-span/",
@@ -2184,7 +2004,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000904"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/fruit-into-baskets/",
@@ -2194,7 +2013,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000911"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/online-election/",
@@ -2204,7 +2022,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000934"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/shortest-bridge/",
@@ -2214,7 +2031,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000973"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/k-closest-points-to-origin/",
@@ -2224,7 +2040,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000981"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/time-based-key-value-store/",
@@ -2234,7 +2049,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000000994"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/rotting-oranges/",
@@ -2244,7 +2058,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001004"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/max-consecutive-ones-iii/",
@@ -2254,7 +2067,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001046"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/last-stone-weight/",
@@ -2264,7 +2076,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001143"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/longest-common-subsequence/",
@@ -2274,7 +2085,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001186"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/maximum-subarray-sum-with-one-deletion/",
@@ -2284,7 +2094,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001197"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/minimum-knight-moves/",
@@ -2294,7 +2103,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001209"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/",
@@ -2304,7 +2112,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001235"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/maximum-profit-in-job-scheduling/",
@@ -2314,7 +2121,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001277"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/count-square-submatrices-with-all-ones/",
@@ -2324,7 +2130,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001297"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/maximum-number-of-occurrences-of-a-substring/",
@@ -2334,7 +2139,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001392"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/longest-happy-prefix/",
@@ -2344,7 +2148,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001423"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/",
@@ -2354,7 +2157,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001448"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/count-good-nodes-in-binary-tree/",
@@ -2364,7 +2166,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001552"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/magnetic-force-between-two-balls/",
@@ -2374,7 +2175,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001559"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/detect-cycles-in-2d-grid/",
@@ -2384,7 +2184,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001584"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/min-cost-to-connect-all-points/",
@@ -2394,7 +2193,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001658"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/",
@@ -2404,7 +2202,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001851"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/minimum-interval-to-include-each-query/",
@@ -2414,7 +2211,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000001899"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/merge-triplets-to-form-target-triplet/",
@@ -2424,7 +2220,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000002001"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/number-of-pairs-of-interchangeable-rectangles/",
@@ -2434,7 +2229,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000002013"),
-                            Companies = new string[0],
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/detect-squares/",
@@ -2444,7 +2238,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000002080"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/range-frequency-queries/",
@@ -2454,7 +2247,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000002115"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/",
@@ -2464,7 +2256,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000002385"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/amount-of-time-for-binary-tree-to-be-infected/",
@@ -2474,7 +2265,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000002517"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/maximum-tastiness-of-candy-basket/",
@@ -2484,7 +2274,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000002643"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Easy",
                             ExternalUrl = "https://leetcode.com/problems/row-with-maximum-ones/",
@@ -2494,7 +2283,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000003159"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/find-occurrences-of-an-element-in-an-array/",
@@ -2504,7 +2292,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000003193"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Hard",
                             ExternalUrl = "https://leetcode.com/problems/count-the-number-of-inversions/",
@@ -2514,7 +2301,6 @@ namespace Modulog.Api.Data.Migrations
                         new
                         {
                             Id = new Guid("21000000-0000-0000-0000-000000003388"),
-                            Companies = new[] { "Amazon" },
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Difficulty = "Medium",
                             ExternalUrl = "https://leetcode.com/problems/count-beautiful-splits-in-an-array/",
@@ -2706,6 +2492,5 @@ namespace Modulog.Api.Data.Migrations
                         .HasConstraintName("fk_user_modules_users_user_id");
                 });
 #pragma warning restore 612, 618
-        }
     }
 }

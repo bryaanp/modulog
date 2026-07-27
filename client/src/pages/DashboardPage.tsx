@@ -53,11 +53,18 @@ export function DashboardPage() {
           )}
           {recommendation.data && (
             <div className="recommendation-body">
-              <span
-                className={`difficulty difficulty-${recommendation.data.difficulty.toLowerCase()}`}
-              >
-                {recommendation.data.difficulty}
-              </span>
+              <div className="badge-list">
+                <span
+                  className={`difficulty difficulty-${recommendation.data.difficulty.toLowerCase()}`}
+                >
+                  {recommendation.data.difficulty}
+                </span>
+                {recommendation.data.companies.map((company) => (
+                  <span className="company-badge" key={company}>
+                    {company}
+                  </span>
+                ))}
+              </div>
               <h3>{recommendation.data.title}</h3>
               <div className="tag-list">
                 {recommendation.data.topicTags.map((tag) => (

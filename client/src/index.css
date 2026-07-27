@@ -391,6 +391,26 @@ textarea:focus-visible {
   text-transform: uppercase;
 }
 
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.company-badge {
+  display: inline-flex;
+  padding: 0.28rem 0.55rem;
+  border: 1px solid #bfd6e8;
+  border-radius: 999px;
+  color: #245678;
+  background: #e8f3fa;
+  font-size: 0.67rem;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 .difficulty-easy {
   color: #2d6b48;
   background: #dff0e3;

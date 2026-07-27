@@ -47,6 +47,7 @@ public sealed class Problem
     public required string Title { get; set; }
     public required string ExternalUrl { get; set; }
     public string[] TopicTags { get; set; } = [];
+    public string[] Companies { get; set; } = [];
     public Difficulty Difficulty { get; set; }
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 }

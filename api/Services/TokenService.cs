@@ -34,6 +34,17 @@ public sealed class TokenService(AppDbContext db, UserManager<AppUser> users, IO
         return pair;
     }
 
+    public async Task RevokeAsync(string rawToken, CancellationToken ct)
+    {
+        var hash = Hash(rawToken);
+        var stored = await db.RefreshTokens.SingleOrDefaultAsync(x => x.TokenHash == hash, ct);
+        if (stored is not null && stored.RevokedAt is null)
+        {
+            stored.RevokedAt = DateTimeOffset.UtcNow;
+            await db.SaveChangesAsync(ct);
+        }
+    }
+
     public async Task<TokenPair?> RotateAsync(string rawToken, CancellationToken ct)
     {
         var hash = Hash(rawToken);
