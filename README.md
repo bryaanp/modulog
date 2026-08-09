@@ -59,8 +59,11 @@ do not use wildcard origins with authenticated APIs.
 
 ## Seed data and admin access
 
-The migrations seed the `leetcode` module and the complete NeetCode 150 problem
-catalog. Catalog metadata, deterministic identifiers, and regeneration
+The migrations seed the `leetcode` module and 1,894 LeetCode problems. The
+catalog includes 1,885 problems tagged across 470 companies from the
+company-wise source snapshot, with six-month data preferred and all-history
+data used when a company has fewer than five six-month problems. Catalog
+metadata, deterministic identifiers, source provenance, and regeneration
 instructions are documented in
 [`docs/problem-catalog.md`](docs/problem-catalog.md). Public registration creates
 the user's `user_modules` row automatically.

@@ -3,6 +3,7 @@ import { ExternalLink, Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/useAuth'
+import { CompanyBadges } from '../components/CompanyBadges'
 import { EmptyState, ErrorMessage, LoadingState } from '../components/Feedback'
 import { PageHeader } from '../components/PageHeader'
 import type { Difficulty, Problem } from '../types/api'
@@ -111,11 +112,7 @@ export function ProblemsPage() {
                 >
                   {problem.difficulty}
                 </span>
-                {problem.companies.map((value) => (
-                  <span className="company-badge" key={value}>
-                    {value}
-                  </span>
-                ))}
+                <CompanyBadges companies={problem.companies} />
               </div>
               <a
                 href={problem.externalUrl}

@@ -77,9 +77,9 @@ public sealed class ApiIntegrationTests : IAsyncLifetime
             new AuthenticationHeaderValue("Bearer", tokens.AccessToken);
 
         var problems = await _client.GetFromJsonAsync<JsonElement>("/api/v1/problems");
-        Assert.Equal(212, problems.GetArrayLength());
+        Assert.Equal(1_894, problems.GetArrayLength());
         Assert.Equal(
-            212,
+            1_894,
             problems
                 .EnumerateArray()
                 .Select(problem => problem.GetProperty("externalUrl").GetString())
@@ -90,7 +90,7 @@ public sealed class ApiIntegrationTests : IAsyncLifetime
             problem => problem.GetProperty("externalUrl").GetString()
                 == "https://leetcode.com/problems/bus-routes/");
         Assert.Equal(
-            95,
+            721,
             problems
                 .EnumerateArray()
                 .Count(problem => problem
@@ -100,7 +100,7 @@ public sealed class ApiIntegrationTests : IAsyncLifetime
 
         var amazonProblems =
             await _client.GetFromJsonAsync<JsonElement>("/api/v1/problems?company=Amazon");
-        Assert.Equal(95, amazonProblems.GetArrayLength());
+        Assert.Equal(721, amazonProblems.GetArrayLength());
 
         var problemId = problems[0].GetProperty("id").GetGuid();
         var entryResponse = await _client.PostAsJsonAsync(

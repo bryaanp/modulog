@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { ArrowRight, CalendarClock, Lightbulb, Target } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/useAuth'
+import { CompanyBadges } from '../components/CompanyBadges'
 import { EmptyState, ErrorMessage, LoadingState } from '../components/Feedback'
 import { PageHeader } from '../components/PageHeader'
 import type { Problem, TopicWeakness } from '../types/api'
@@ -59,11 +60,7 @@ export function DashboardPage() {
                 >
                   {recommendation.data.difficulty}
                 </span>
-                {recommendation.data.companies.map((company) => (
-                  <span className="company-badge" key={company}>
-                    {company}
-                  </span>
-                ))}
+                <CompanyBadges companies={recommendation.data.companies} />
               </div>
               <h3>{recommendation.data.title}</h3>
               <div className="tag-list">

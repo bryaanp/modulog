@@ -1,6 +1,9 @@
 param(
     [string]$OutputPath = (Join-Path $PSScriptRoot '..\api\Data\LeetCodeCatalog.cs'),
-    [string]$AmazonListPath = (Join-Path $PSScriptRoot '..\catalog\amazon-last-six-months-reddit.txt')
+    [string]$ManifestPath = (Join-Path $PSScriptRoot '..\catalog\leetcode-company-import-manifest.json'),
+    [string]$CompanyRepositoryPath = (Join-Path $PSScriptRoot '..\.appdata\leetcode-company-wise-problems-source'),
+    [string]$AmazonListPath = (Join-Path $PSScriptRoot '..\catalog\amazon-last-six-months-reddit.txt'),
+    [string]$SourceCommit = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -11,6 +14,11 @@ $headers = @{
 
 $neetcodeListUrl = 'https://raw.githubusercontent.com/Zanger67/WikiLeet/main/Lists/N150'
 $metadataUrl = 'https://raw.githubusercontent.com/Zanger67/leetcode-question-data/main/data/leetcode_s.json'
+$companyRepositoryUrl = 'https://github.com/liquidslr/leetcode-company-wise-problems'
+
+if (-not (Test-Path -LiteralPath $CompanyRepositoryPath -PathType Container)) {
+    throw "Company repository not found at '$CompanyRepositoryPath'. Clone $companyRepositoryUrl there or pass -CompanyRepositoryPath."
+}
 
 $neetcodeText = Invoke-RestMethod -Headers $headers -Uri $neetcodeListUrl
 $neetcodePattern = '(?m)^(?<number>\d+)\. (?<title>[^\r\n]+)\r?\n\r?\n(?<difficulty>Easy|Med\.|Hard)$'
@@ -27,16 +35,11 @@ $amazonSlugs = @(
 )
 
 if ($amazonSlugs.Count -ne 95) {
-    throw "Expected 95 Amazon compilation entries but found $($amazonSlugs.Count)."
+    throw "Expected 95 legacy Amazon entries but found $($amazonSlugs.Count)."
 }
 
 if (($amazonSlugs | Sort-Object -Unique).Count -ne $amazonSlugs.Count) {
-    throw 'The Amazon compilation manifest contains duplicate slugs.'
-}
-
-$amazonSlugSet = @{}
-foreach ($slug in $amazonSlugs) {
-    $amazonSlugSet[$slug] = $true
+    throw 'The legacy Amazon manifest contains duplicate slugs.'
 }
 
 $metadataResponse = Invoke-RestMethod -Headers $headers -Uri $metadataUrl
@@ -55,67 +58,137 @@ foreach ($question in $questions) {
 }
 
 $selectedQuestions = @{}
+$companiesByNumber = @{}
 
-foreach ($entry in $neetcodeEntries) {
-    $number = [int]$entry.Groups['number'].Value
+function Add-Question {
+    param(
+        [Parameter(Mandatory)]$Question,
+        [string]$Company
+    )
 
-    if (-not $questionsByNumber.ContainsKey($number)) {
-        throw "LeetCode metadata is missing problem $number."
+    $number = 0
+    if (-not [int]::TryParse([string]$Question.frontendQuestionId, [ref]$number)) {
+        throw "Problem '$($Question.titleSlug)' does not have a numeric frontend identifier."
     }
 
-    $selectedQuestions[$number] = $questionsByNumber[$number]
+    $selectedQuestions[$number] = $Question
+    if (-not $companiesByNumber.ContainsKey($number)) {
+        $companiesByNumber[$number] = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+    }
+
+    if ($Company) {
+        [void]$companiesByNumber[$number].Add($Company)
+    }
+}
+
+# Preserve the pre-existing shared catalog, but company labels come only from the
+# company-wise repository selection below.
+foreach ($entry in $neetcodeEntries) {
+    $number = [int]$entry.Groups['number'].Value
+    if (-not $questionsByNumber.ContainsKey($number)) {
+        throw "LeetCode metadata is missing NeetCode problem $number."
+    }
+
+    Add-Question -Question $questionsByNumber[$number]
 }
 
 foreach ($slug in $amazonSlugs) {
     if (-not $questionsBySlug.ContainsKey($slug)) {
-        throw "LeetCode metadata is missing problem slug '$slug'."
+        throw "LeetCode metadata is missing legacy catalog problem '$slug'."
     }
 
-    $question = $questionsBySlug[$slug]
-    $number = 0
+    Add-Question -Question $questionsBySlug[$slug]
+}
 
-    if (-not [int]::TryParse([string]$question.frontendQuestionId, [ref]$number)) {
-        throw "Problem slug '$slug' does not have a numeric frontend identifier."
+$companyDirectories = @(Get-ChildItem -LiteralPath $CompanyRepositoryPath -Directory | Sort-Object Name)
+if ($companyDirectories.Count -lt 400) {
+    throw "Expected at least 400 company directories but found $($companyDirectories.Count)."
+}
+
+$fallbackCompanies = [System.Collections.Generic.List[string]]::new()
+$sixMonthCompanies = [System.Collections.Generic.List[string]]::new()
+$associationCount = 0
+$companyTaggedNumbers = [System.Collections.Generic.HashSet[int]]::new()
+
+foreach ($directory in $companyDirectories) {
+    $sixMonthPath = Join-Path $directory.FullName '3. Six Months.csv'
+    $allHistoryPath = Join-Path $directory.FullName '5. All.csv'
+
+    if (-not (Test-Path -LiteralPath $sixMonthPath -PathType Leaf) -or
+        -not (Test-Path -LiteralPath $allHistoryPath -PathType Leaf)) {
+        throw "Company '$($directory.Name)' is missing its six-month or all-history CSV."
     }
 
-    $selectedQuestions[$number] = $question
+    $sixMonthRows = @(
+        Import-Csv -LiteralPath $sixMonthPath |
+            Where-Object { $_.Link -and $_.Title }
+    )
+
+    if ($sixMonthRows.Count -lt 5) {
+        $rows = @(
+            Import-Csv -LiteralPath $allHistoryPath |
+                Where-Object { $_.Link -and $_.Title }
+        )
+        $fallbackCompanies.Add($directory.Name)
+    } else {
+        $rows = $sixMonthRows
+        $sixMonthCompanies.Add($directory.Name)
+    }
+
+    $seenCompanySlugs = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+    foreach ($row in $rows) {
+        $match = [regex]::Match(
+            [string]$row.Link,
+            '^https://leetcode\.com/problems/(?<slug>[^/?#]+)/?$')
+
+        if (-not $match.Success) {
+            throw "Company '$($directory.Name)' contains an invalid LeetCode URL: '$($row.Link)'."
+        }
+
+        $slug = $match.Groups['slug'].Value
+        if (-not $seenCompanySlugs.Add($slug)) {
+            continue
+        }
+
+        if (-not $questionsBySlug.ContainsKey($slug)) {
+            throw "LeetCode metadata is missing company-tagged problem '$slug'."
+        }
+
+        $question = $questionsBySlug[$slug]
+        Add-Question -Question $question -Company $directory.Name
+        [void]$companyTaggedNumbers.Add([int]$question.frontendQuestionId)
+        $associationCount++
+    }
 }
 
 $catalog = @(
     $selectedQuestions.GetEnumerator() |
         ForEach-Object {
             $question = $_.Value
-
             [pscustomobject]@{
                 Number = [int]$_.Key
                 Title = [string]$question.title
                 Url = "https://leetcode.com/problems/$($question.titleSlug)/"
-                Topics = @($question.topicTags | ForEach-Object { [string]$_.slug })
-                Companies = if ($amazonSlugSet.ContainsKey([string]$question.titleSlug)) {
-                    @('Amazon')
-                } else {
-                    @()
-                }
+                Topics = @($question.topicTags | ForEach-Object { [string]$_.slug } | Sort-Object -Unique)
+                Companies = @($companiesByNumber[[int]$_.Key] | Sort-Object)
                 Difficulty = [string]$question.difficulty
             }
         } |
         Sort-Object Number
 )
 
-if ($catalog.Count -ne 212) {
-    throw "Expected 212 combined catalog entries after deduplication but found $($catalog.Count)."
-}
-
 $duplicateNumbers = $catalog | Group-Object Number | Where-Object Count -gt 1
 $duplicateUrls = $catalog | Group-Object Url | Where-Object Count -gt 1
-
 if ($duplicateNumbers -or $duplicateUrls) {
     throw 'The combined catalog contains duplicate problem numbers or URLs.'
 }
 
+if ($companyTaggedNumbers.Count -lt 1000 -or $associationCount -lt $companyTaggedNumbers.Count) {
+    throw 'The selected company catalog is unexpectedly small.'
+}
+
 function ConvertTo-CSharpString {
     param([string]$Value)
-
     return '"' + $Value.Replace('\', '\\').Replace('"', '\"') + '"'
 }
 
@@ -175,9 +248,33 @@ $lines.Add('}')
 
 $resolvedOutputPath = [System.IO.Path]::GetFullPath($OutputPath)
 $content = [string]::Join([Environment]::NewLine, $lines) + [Environment]::NewLine
+[System.IO.File]::WriteAllText($resolvedOutputPath, $content, [System.Text.UTF8Encoding]::new($false))
+
+if (-not $SourceCommit) {
+    try {
+        $SourceCommit = (& git -c "safe.directory=$([System.IO.Path]::GetFullPath($CompanyRepositoryPath).Replace('\', '/'))" -C $CompanyRepositoryPath rev-parse HEAD 2>$null).Trim()
+    } catch {
+        $SourceCommit = 'unknown'
+    }
+}
+
+$manifest = [ordered]@{
+    source = $companyRepositoryUrl
+    sourceCommit = $SourceCommit
+    selectionRule = 'Use 3. Six Months.csv when it has at least 5 problems; otherwise use 5. All.csv.'
+    companyCount = $companyDirectories.Count
+    sixMonthCompanyCount = $sixMonthCompanies.Count
+    allHistoryFallbackCompanyCount = $fallbackCompanies.Count
+    companyProblemAssociationCount = $associationCount
+    companyTaggedProblemCount = $companyTaggedNumbers.Count
+    totalCatalogProblemCount = $catalog.Count
+    allHistoryFallbackCompanies = @($fallbackCompanies)
+}
+$manifestContent = $manifest | ConvertTo-Json -Depth 4
 [System.IO.File]::WriteAllText(
-    $resolvedOutputPath,
-    $content,
+    [System.IO.Path]::GetFullPath($ManifestPath),
+    $manifestContent + [Environment]::NewLine,
     [System.Text.UTF8Encoding]::new($false))
 
-Write-Output "Generated $($catalog.Count) unique catalog entries at $resolvedOutputPath."
+Write-Output "Generated $($catalog.Count) catalog entries with $associationCount company associations at $resolvedOutputPath."
+Write-Output "Used six-month data for $($sixMonthCompanies.Count) companies and all-history fallback data for $($fallbackCompanies.Count)."
