@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useInterview } from '../api/useInterview'
 import { ErrorMessage, LoadingState } from '../components/Feedback'
 import { PageHeader } from '../components/PageHeader'
+import { ReviewDuePicker } from '../components/ReviewDuePicker'
 import type { Entry, EntryInput, Problem } from '../types/api'
 
 export function PracticePage() {
@@ -20,6 +21,16 @@ export function PracticePage() {
   const [hints, setHints] = useState(0)
   const [confidence, setConfidence] = useState<number | ''>('')
   const [reviewDueAt, setReviewDueAt] = useState('')
+  const [notes, setNotes] = useState('')
+
+  const resetForm = () => {
+    setProblemId('')
+    setMinutes(30)
+    setHints(0)
+    setConfidence('')
+    setReviewDueAt('')
+    setNotes('')
+  }
 
   const createEntry = useMutation({
     mutationFn: (input: EntryInput) =>
@@ -28,6 +39,7 @@ export function PracticePage() {
         body: JSON.stringify(input),
       }),
     onSuccess: async () => {
+      resetForm()
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['entries'] }),
         queryClient.invalidateQueries({ queryKey: ['overview'] }),
@@ -45,6 +57,7 @@ export function PracticePage() {
       hintsUsed: hints,
       selfRatedConfidence: confidence === '' ? null : confidence,
       reviewDueAt: reviewDueAt ? new Date(reviewDueAt).toISOString() : null,
+      notes: notes.trim() ? notes.trim() : null,
     })
   }
 
@@ -122,16 +135,18 @@ export function PracticePage() {
               <option value="5">5 · Can explain and reproduce</option>
             </select>
           </label>
+          <ReviewDuePicker
+            value={reviewDueAt || null}
+            onChange={(value) => setReviewDueAt(value ?? '')}
+          />
           <label>
-            Review due
-            <input
-              type="datetime-local"
-              value={reviewDueAt}
-              onChange={(event) => setReviewDueAt(event.target.value)}
+            Notes
+            <textarea
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+              rows={4}
+              placeholder="Add your own notes for this problem, such as what went well, what to revisit, or a reminder for review."
             />
-            <span className="field-help">
-              Optional. An overdue review increases the weakness signal.
-            </span>
           </label>
           <button className="button button-primary" disabled={createEntry.isPending}>
             {createEntry.isPending ? 'Saving attempt…' : 'Save attempt'}
