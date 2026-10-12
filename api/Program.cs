@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Text;
 using Modulog.Api.Modules.Interview;
+using Modulog.Api.Modules.Software;
 using Modulog.Api.Endpoints;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -239,6 +240,7 @@ problems.MapDelete("/{id:guid}", async (Guid id, AppDbContext db, CancellationTo
 
 api.MapInterviewEndpoints();
 api.MapProjectEndpoints();
+api.MapSoftwareEndpoints();
 
 app.Run();
 
