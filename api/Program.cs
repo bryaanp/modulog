@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
+using Modulog.Api.Modules.Interview;
+using Modulog.Api.Endpoints;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -72,6 +73,7 @@ builder.Services.AddRateLimiter(options =>
             }));
 });
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<ProjectAccess>();
 builder.Services.AddSingleton<WeakTopicScorer>();
 builder.Services.AddScoped<RecommendationService>();
 builder.Services.AddHttpClient<SystemDesignService>();
@@ -105,6 +107,7 @@ var api = app.MapGroup("/api/v1");
 
 api.MapPost("/auth/register", async (RegisterRequest request, UserManager<AppUser> users, AppDbContext db, CancellationToken ct) =>
 {
+    await using var transaction = await db.Database.BeginTransactionAsync(ct);
     var email = request.Email.Trim().ToLowerInvariant();
     var user = new AppUser { Id = Guid.NewGuid(), UserName = email, Email = email, CreatedAt = DateTimeOffset.UtcNow };
     var result = await users.CreateAsync(user, request.Password);
@@ -115,7 +118,9 @@ api.MapPost("/auth/register", async (RegisterRequest request, UserManager<AppUse
 
     var module = await db.Modules.SingleAsync(x => x.Key == "leetcode", ct);
     db.UserModules.Add(new UserModule { UserId = user.Id, ModuleId = module.Id });
+    ProjectAccess.AddDefaultInterview(db, user.Id);
     await db.SaveChangesAsync(ct);
+    await transaction.CommitAsync(ct);
     return Results.Created($"/api/v1/users/{user.Id}", new { user.Id, user.Email, user.EmailConfirmed });
 }).AllowAnonymous().RequireRateLimiting("auth");
 
@@ -232,61 +237,8 @@ problems.MapDelete("/{id:guid}", async (Guid id, AppDbContext db, CancellationTo
     db.Remove(p); await db.SaveChangesAsync(ct); return Results.NoContent();
 }).RequireAuthorization(p => p.RequireRole("admin"));
 
-api.MapPost("/entries", async (CreateEntryRequest request, ClaimsPrincipal principal, AppDbContext db, CancellationToken ct) =>
-{
-    var problem = await db.ProblemBank.FindAsync([request.ProblemBankId], ct);
-    if (problem is null)
-    {
-        return Results.ValidationProblem(new Dictionary<string, string[]> { ["problemBankId"] = ["Problem does not exist."] });
-    }
-
-    if (request.TimeSpentMinutes <= 0 || request.HintsUsed < 0 || request.SelfRatedConfidence is < 1 or > 5)
-    {
-        return Results.ValidationProblem(new Dictionary<string, string[]> { ["entry"] = ["Time must be positive, hints non-negative, and confidence between 1 and 5."] });
-    }
-
-    var module = await db.Modules.SingleAsync(x => x.Key == "leetcode", ct);
-    var payload = new LeetCodeEntryData(problem.Id, request.TimeSpentMinutes, request.HintsUsed, request.SelfRatedConfidence, problem.TopicTags);
-    var entry = new Entry { UserId = principal.UserId(), ModuleId = module.Id, EntryType = "problem_attempt", Data = JsonSerializer.Serialize(payload), ReviewDueAt = request.ReviewDueAt, LoggedAt = request.LoggedAt ?? DateTimeOffset.UtcNow };
-    db.Entries.Add(entry); await db.SaveChangesAsync(ct);
-    return Results.Created($"/api/v1/entries/{entry.Id}", entry);
-}).RequireAuthorization();
-
-api.MapGet("/entries", async (DateTimeOffset? from, DateTimeOffset? to, string? topic, ClaimsPrincipal principal, AppDbContext db, CancellationToken ct) =>
-{
-    var query = db.Entries.AsNoTracking().Where(x => x.UserId == principal.UserId());
-    if (from is not null)
-    {
-        query = query.Where(x => x.LoggedAt >= from);
-    }
-
-    if (to is not null)
-    {
-        query = query.Where(x => x.LoggedAt <= to);
-    }
-
-    if (!string.IsNullOrWhiteSpace(topic))
-    {
-        var topicFilter = JsonSerializer.Serialize(new { topic_tags = new[] { topic.ToLowerInvariant() } });
-        query = query.Where(x => EF.Functions.JsonContains(x.Data, topicFilter));
-    }
-    return Results.Ok(await query.OrderByDescending(x => x.LoggedAt).ToListAsync(ct));
-}).RequireAuthorization();
-
-api.MapGet("/insights/weak-topics", async (ClaimsPrincipal principal, AppDbContext db, WeakTopicScorer scorer, CancellationToken ct) =>
-{
-    var entries = await db.Entries.AsNoTracking().Where(x => x.UserId == principal.UserId()).ToListAsync(ct);
-    return Results.Ok(scorer.Score(entries, DateTimeOffset.UtcNow));
-}).RequireAuthorization();
-
-problems.MapGet("/recommend", async (int? excludeDays, ClaimsPrincipal principal, RecommendationService service, CancellationToken ct) =>
-    await service.RecommendAsync(principal.UserId(), Math.Clamp(excludeDays ?? 7, 0, 90), ct) is { } p ? Results.Ok(p) : Results.NotFound()).RequireAuthorization();
-
-api.MapPost("/system-design/generate", async (SystemDesignRequest request, ClaimsPrincipal principal, SystemDesignService service, CancellationToken ct) =>
-{
-    try { return Results.Ok(await service.GenerateAsync(principal.UserId(), request.WeakTopic, request.Level, ct)); }
-    catch (InvalidOperationException e) { return Results.Problem(e.Message, statusCode: 503); }
-}).RequireAuthorization();
+api.MapInterviewEndpoints();
+api.MapProjectEndpoints();
 
 app.Run();
 
@@ -326,8 +278,6 @@ sealed record ProblemRequest(
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToArray();
 }
-sealed record CreateEntryRequest(Guid ProblemBankId, int TimeSpentMinutes, int HintsUsed, int? SelfRatedConfidence, DateTimeOffset? ReviewDueAt, DateTimeOffset? LoggedAt);
-sealed record SystemDesignRequest(string? WeakTopic, string? Level);
 
 static class ClaimsExtensions
 {

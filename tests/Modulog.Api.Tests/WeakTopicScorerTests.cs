@@ -1,6 +1,6 @@
 using System.Text.Json;
 using Modulog.Api.Domain;
-using Modulog.Api.Services;
+using Modulog.Api.Modules.Interview;
 
 namespace Modulog.Api.Tests;
 

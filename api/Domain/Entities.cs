@@ -91,4 +91,5 @@ public sealed record LeetCodeEntryData(
     [property: JsonPropertyName("time_spent_minutes")] int TimeSpentMinutes,
     [property: JsonPropertyName("hints_used")] int HintsUsed,
     [property: JsonPropertyName("self_rated_confidence")] int? SelfRatedConfidence,
-    [property: JsonPropertyName("topic_tags")] string[] TopicTags);
+    [property: JsonPropertyName("topic_tags")] string[] TopicTags,
+    [property: JsonPropertyName("notes")] string? Notes = null);

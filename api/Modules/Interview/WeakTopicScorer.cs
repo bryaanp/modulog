@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Modulog.Api.Domain;
 
-namespace Modulog.Api.Services;
+namespace Modulog.Api.Modules.Interview;
 
 public sealed record TopicWeakness(string Topic, double Score, int AttemptCount, DateTimeOffset LastAttemptAt);
 
@@ -17,7 +17,8 @@ public sealed class WeakTopicScorer
 
     public IReadOnlyList<TopicWeakness> Score(IEnumerable<Entry> entries, DateTimeOffset now)
     {
-        var signals = entries.Select(e => (Entry: e, Data: JsonSerializer.Deserialize<LeetCodeEntryData>(e.Data)))
+        var signals = entries.Where(e => e.EntryType == "problem_attempt" && e.SchemaVersion == 1)
+            .Select(e => (Entry: e, Data: JsonSerializer.Deserialize<LeetCodeEntryData>(e.Data)))
             .Where(x => x.Data is not null)
             .SelectMany(x => x.Data!.TopicTags.Select(topic => (Topic: topic, x.Entry, x.Data)));
         return signals.GroupBy(x => x.Topic, StringComparer.OrdinalIgnoreCase)

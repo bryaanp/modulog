@@ -4,11 +4,11 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Modulog.Api.Data;
 
-namespace Modulog.Api.Services;
+namespace Modulog.Api.Modules.Interview;
 
 public sealed class SystemDesignService(HttpClient http, IConfiguration configuration, AppDbContext db, WeakTopicScorer scorer)
 {
-    public async Task<object> GenerateAsync(Guid userId, string? requestedTopic, string? level, CancellationToken ct)
+    public async Task<object> GenerateAsync(Guid userId, Guid projectId, string? requestedTopic, string? level, CancellationToken ct)
     {
         var apiKey = configuration["OpenAI:ApiKey"];
         if (string.IsNullOrWhiteSpace(apiKey))
@@ -16,7 +16,7 @@ public sealed class SystemDesignService(HttpClient http, IConfiguration configur
             throw new InvalidOperationException("OpenAI is not configured.");
         }
 
-        var entries = await db.Entries.AsNoTracking().Where(x => x.UserId == userId).ToListAsync(ct);
+        var entries = await InterviewEntryStore.Query(db, userId, projectId).ToListAsync(ct);
         var topics = scorer.Score(entries, DateTimeOffset.UtcNow).Take(3).Select(x => x.Topic);
         var context = requestedTopic ?? string.Join(", ", topics);
         var body = new

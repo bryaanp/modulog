@@ -4,14 +4,17 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Modulog.Api.Data;
 using Npgsql;
 
 namespace Modulog.Api.Tests;
 
-public sealed class ApiIntegrationTests : IAsyncLifetime
+public sealed partial class ApiIntegrationTests : IAsyncLifetime
 {
     private const string AdminConnection =
         "Host=localhost;Port=5432;Database=modulog;Username=modulog;Password=modulog_dev";
@@ -45,6 +48,17 @@ public sealed class ApiIntegrationTests : IAsyncLifetime
                     ["ConnectionStrings:Default"] = testConnection,
                     ["Cors:AllowedOrigins:0"] = "http://localhost:5173"
                 });
+            });
+            // Program reads its connection string before WebApplicationFactory's
+            // configuration callback runs. Replace the context explicitly so the
+            // test host cannot accidentally query the development/public schema.
+            builder.ConfigureTestServices(services =>
+            {
+                services.RemoveAll<DbContextOptions<AppDbContext>>();
+                services.RemoveAll<AppDbContext>();
+                services.AddDbContext<AppDbContext>(o => o
+                    .UseNpgsql(testConnection, postgres => postgres.MigrationsHistoryTable("__EFMigrationsHistory", _schema))
+                    .UseSnakeCaseNamingConvention());
             });
         });
         _client = _factory.CreateClient();

@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Modulog.Api.Data;
 using Modulog.Api.Domain;
 
-namespace Modulog.Api.Services;
+namespace Modulog.Api.Modules.Interview;
 
 public sealed class RecommendationService(AppDbContext db, WeakTopicScorer scorer)
 {
-    public async Task<Problem?> RecommendAsync(Guid userId, int excludeDays, CancellationToken ct)
+    public async Task<Problem?> RecommendAsync(Guid userId, Guid projectId, int excludeDays, CancellationToken ct)
     {
-        var entries = await db.Entries.AsNoTracking().Where(x => x.UserId == userId).ToListAsync(ct);
+        var entries = await InterviewEntryStore.Query(db, userId, projectId).ToListAsync(ct);
         var weaknesses = scorer.Score(entries, DateTimeOffset.UtcNow);
         var cutoff = DateTimeOffset.UtcNow.AddDays(-excludeDays);
         var recentIds = entries.Where(x => x.LoggedAt >= cutoff)
