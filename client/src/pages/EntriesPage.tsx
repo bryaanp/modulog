@@ -1,19 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import { CalendarDays, Clock3, Lightbulb } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { useAuth } from '../auth/useAuth'
+import { useInterview } from '../api/useInterview'
 import { EmptyState, ErrorMessage, LoadingState } from '../components/Feedback'
 import { PageHeader } from '../components/PageHeader'
 import type { Entry, Problem } from '../types/api'
 import { formatDate, parseEntryData, topicLabel } from '../utils/format'
 
 export function EntriesPage() {
-  const { request } = useAuth()
+  const { request, projectId } = useInterview()
   const [topic, setTopic] = useState('')
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
   const entries = useQuery({
-    queryKey: ['entries', from, to, topic],
+    queryKey: ['entries', projectId, from, to, topic],
     queryFn: () => {
       const params = new URLSearchParams()
       if (from) params.set('from', new Date(`${from}T00:00:00`).toISOString())

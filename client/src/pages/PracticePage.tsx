@@ -2,13 +2,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CheckCircle2 } from 'lucide-react'
 import { type FormEvent, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useAuth } from '../auth/useAuth'
+import { useInterview } from '../api/useInterview'
 import { ErrorMessage, LoadingState } from '../components/Feedback'
 import { PageHeader } from '../components/PageHeader'
 import type { Entry, EntryInput, Problem } from '../types/api'
 
 export function PracticePage() {
-  const { request } = useAuth()
+  const { request } = useInterview()
   const queryClient = useQueryClient()
   const [searchParams] = useSearchParams()
   const problems = useQuery({
@@ -30,6 +30,7 @@ export function PracticePage() {
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['entries'] }),
+        queryClient.invalidateQueries({ queryKey: ['overview'] }),
         queryClient.invalidateQueries({ queryKey: ['weak-topics'] }),
         queryClient.invalidateQueries({ queryKey: ['recommendation'] }),
       ])

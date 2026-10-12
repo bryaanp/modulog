@@ -1,13 +1,13 @@
 import { useMutation } from '@tanstack/react-query'
 import { BrainCircuit, Sparkles } from 'lucide-react'
 import { type FormEvent, useState } from 'react'
-import { useAuth } from '../auth/useAuth'
+import { useInterview } from '../api/useInterview'
 import { ErrorMessage } from '../components/Feedback'
 import { PageHeader } from '../components/PageHeader'
 import type { SystemDesignResult } from '../types/api'
 
 export function SystemDesignPage() {
-  const { request } = useAuth()
+  const { request } = useInterview()
   const [level, setLevel] = useState('intermediate')
   const [weakTopic, setWeakTopic] = useState('')
   const generation = useMutation({

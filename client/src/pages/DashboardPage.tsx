@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { ArrowRight, CalendarClock, Lightbulb, Target } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../auth/useAuth'
+import { useInterview } from '../api/useInterview'
 import { CompanyBadges } from '../components/CompanyBadges'
 import { EmptyState, ErrorMessage, LoadingState } from '../components/Feedback'
 import { PageHeader } from '../components/PageHeader'
@@ -9,13 +9,13 @@ import type { Problem, TopicWeakness } from '../types/api'
 import { formatDate, topicLabel } from '../utils/format'
 
 export function DashboardPage() {
-  const { request } = useAuth()
+  const { request, projectId, link } = useInterview()
   const weaknesses = useQuery({
-    queryKey: ['weak-topics'],
+    queryKey: ['weak-topics', projectId],
     queryFn: () => request<TopicWeakness[]>('/api/v1/insights/weak-topics'),
   })
   const recommendation = useQuery({
-    queryKey: ['recommendation'],
+    queryKey: ['recommendation', projectId],
     queryFn: () => request<Problem>('/api/v1/problems/recommend'),
     retry: false,
   })
@@ -27,7 +27,7 @@ export function DashboardPage() {
         title="Make the next session count."
         description="Your recent work is translated into weak-topic signals and a practical next problem."
         actions={
-          <Link className="button button-primary" to="/practice">
+          <Link className="button button-primary" to={link('/practice')}>
             Log an attempt
             <ArrowRight size={17} />
           </Link>
@@ -81,7 +81,7 @@ export function DashboardPage() {
                 </a>
                 <Link
                   className="text-link"
-                  to={`/practice?problem=${recommendation.data.id}`}
+                  to={link(`/practice?problem=${recommendation.data.id}`)}
                 >
                   Log this attempt <ArrowRight size={15} />
                 </Link>
@@ -132,7 +132,7 @@ export function DashboardPage() {
       </section>
 
       <section className="quick-links">
-        <Link className="quick-link" to="/entries">
+        <Link className="quick-link" to={link('/entries')}>
           <CalendarClock />
           <span>
             <strong>Review your history</strong>
@@ -140,7 +140,7 @@ export function DashboardPage() {
           </span>
           <ArrowRight />
         </Link>
-        <Link className="quick-link" to="/system-design">
+        <Link className="quick-link" to={link('/system-design')}>
           <Lightbulb />
           <span>
             <strong>Generate a system-design prompt</strong>

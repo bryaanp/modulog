@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { ExternalLink, Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../auth/useAuth'
+import { useInterview } from '../api/useInterview'
 import { CompanyBadges } from '../components/CompanyBadges'
 import { EmptyState, ErrorMessage, LoadingState } from '../components/Feedback'
 import { PageHeader } from '../components/PageHeader'
@@ -10,7 +10,7 @@ import type { Difficulty, Problem } from '../types/api'
 import { topicLabel } from '../utils/format'
 
 export function ProblemsPage() {
-  const { request } = useAuth()
+  const { request, link } = useInterview()
   const [search, setSearch] = useState('')
   const [topic, setTopic] = useState('')
   const [company, setCompany] = useState('')
@@ -131,7 +131,7 @@ export function ProblemsPage() {
                 </span>
               ))}
             </div>
-            <Link className="text-link" to={`/practice?problem=${problem.id}`}>
+            <Link className="text-link" to={link(`/practice?problem=${problem.id}`)}>
               Log an attempt
             </Link>
           </article>
