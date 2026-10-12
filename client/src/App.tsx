@@ -9,6 +9,9 @@ import { PracticePage } from './pages/PracticePage'
 import { ProblemsPage } from './pages/ProblemsPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { SystemDesignPage } from './pages/SystemDesignPage'
+import { OverviewPage } from './pages/OverviewPage'
+import { ProjectsPage } from './pages/ProjectsPage'
+import { ProjectPage } from './pages/ProjectPage'
 
 export default function App() {
   return (
@@ -17,7 +20,10 @@ export default function App() {
       <Route path="/register" element={<RegisterPage />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<AppShell />}>
-          <Route index element={<DashboardPage />} />
+          <Route index element={<OverviewPage />} />
+          <Route path="projects" element={<ProjectsPage />} />
+          <Route path="projects/:projectId" element={<ProjectPage />} />
+          <Route path="interview" element={<DashboardPage />} />
           <Route path="problems" element={<ProblemsPage />} />
           <Route path="practice" element={<PracticePage />} />
           <Route path="entries" element={<EntriesPage />} />

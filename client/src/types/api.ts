@@ -34,6 +34,10 @@ export interface Entry {
   id: string
   userId: string
   moduleId: string
+  projectId: string
+  schemaVersion: number
+  title: string | null
+  status: string | null
   entryType: string
   data: string
   reviewDueAt: string | null
@@ -54,6 +58,7 @@ export interface EntryInput {
   hintsUsed: number
   selfRatedConfidence: number | null
   reviewDueAt: string | null
+  notes?: string | null
 }
 
 export interface TopicWeakness {
@@ -66,4 +71,40 @@ export interface TopicWeakness {
 export interface SystemDesignResult {
   scenario: string
   weakTopicContext: string
+}
+
+export interface Project {
+  id: string
+  name: string
+  description: string | null
+  isArchived: boolean
+  isDefaultInterview: boolean
+  createdAt: string
+}
+
+export interface ProjectDetail {
+  project: Project
+  modules: { key: string; name: string; enabled: boolean }[]
+}
+
+export interface Overview {
+  projects: Project[]
+  summaries: {
+    projectId: string
+    projectName: string
+    moduleKey: string
+    moduleName: string
+    entryCount: number
+    openMilestones: number
+  }[]
+  upcoming: Entry[]
+  recent: Entry[]
+}
+
+export interface SoftwareInput {
+  title: string
+  notes: string | null
+  dueAt: string | null
+  status: string | null
+  schemaVersion: 1
 }

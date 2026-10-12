@@ -26,6 +26,61 @@
   -webkit-font-smoothing: antialiased;
 }
 
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 1rem;
+}
+
+.module-summary {
+  display: grid;
+  gap: 0.3rem;
+  padding-top: 1rem;
+  font-size: 0.9rem;
+}
+.module-summary span,
+.activity-list span,
+.activity-list small {
+  color: var(--ink-soft);
+}
+.activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.activity-list li {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+.activity-list li:last-child {
+  border-bottom: 0;
+}
+.activity-list .button {
+  justify-self: start;
+}
+.activity-list p {
+  margin: 0.3rem 0;
+}
+.project-settings summary {
+  cursor: pointer;
+  font-weight: 650;
+}
+.project-settings[open] summary {
+  margin-bottom: 1.5rem;
+}
+.project-settings .form-card {
+  padding: 0 0 1.5rem;
+}
+.entry-notes {
+  white-space: pre-wrap;
+}
+.work-section + .work-section {
+  margin-top: 2rem;
+}
+
 * {
   box-sizing: border-box;
 }

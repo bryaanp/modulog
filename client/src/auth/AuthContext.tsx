@@ -10,10 +10,12 @@ import { apiUrl, ApiError, readApiResponse } from '../api/http'
 import type { RegistrationResult, TokenPair } from '../types/api'
 import { AuthContext, type Session } from './context'
 import { readIdentity } from './token'
+import { useQueryClient } from '@tanstack/react-query'
 
 const refreshTokenKey = 'modulog.refresh-token'
 
 export function AuthProvider({ children }: PropsWithChildren) {
+  const queryClient = useQueryClient()
   const [session, setSession] = useState<Session | null>(null)
   const [isInitializing, setIsInitializing] = useState(true)
   const refreshInFlight = useRef<Promise<string | null> | null>(null)
@@ -38,9 +40,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
       }
     } finally {
       sessionStorage.removeItem(refreshTokenKey)
+      queryClient.clear()
       setSession(null)
     }
-  }, [])
+  }, [queryClient])
 
   const refresh = useCallback(async () => {
     const refreshToken = sessionStorage.getItem(refreshTokenKey)
@@ -82,9 +85,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       })
-      applyTokens(await readApiResponse<TokenPair>(response))
+      const tokens = await readApiResponse<TokenPair>(response)
+      queryClient.clear()
+      applyTokens(tokens)
     },
-    [applyTokens],
+    [applyTokens, queryClient],
   )
 
   const register = useCallback(async (email: string, password: string) => {

@@ -12,9 +12,10 @@ import {
 import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { useAuth } from '../auth/useAuth'
+import { useInterview } from '../api/useInterview'
 
 const links = [
-  { to: '/', label: 'Overview', icon: Gauge, end: true },
+  { to: '/interview', label: 'Interview overview', icon: Gauge },
   { to: '/problems', label: 'Problem bank', icon: BookOpen },
   { to: '/practice', label: 'Log practice', icon: ClipboardPlus },
   { to: '/entries', label: 'History', icon: History },
@@ -23,6 +24,7 @@ const links = [
 
 export function AppShell() {
   const { session, logout } = useAuth()
+  const { link, projectId } = useInterview()
   const [menuOpen, setMenuOpen] = useState(false)
   const isAdmin = session?.roles.includes('admin')
 
@@ -48,10 +50,26 @@ export function AppShell() {
           <span className="brand-mark">M</span>
           <span>modulog</span>
         </a>
-        <div className="module-label">LEETCODE MODULE</div>
+        <div className="module-label">PERSONAL WORKSPACE</div>
         <nav aria-label="Primary navigation">
-          {links.map(({ to, label, icon: Icon, end }) => (
-            <NavLink key={to} to={to} end={end} onClick={() => setMenuOpen(false)}>
+          <NavLink to="/" end onClick={() => setMenuOpen(false)}>
+            <Gauge size={18} />
+            Overview
+          </NavLink>
+          <NavLink to="/projects" onClick={() => setMenuOpen(false)}>
+            <BookOpen size={18} />
+            Projects
+          </NavLink>
+        </nav>
+        <div className="module-label">INTERVIEW PREPARATION</div>
+        <nav aria-label="Interview navigation">
+          {projectId && (
+            <NavLink to={`/projects/${projectId}`} onClick={() => setMenuOpen(false)}>
+              Back to project
+            </NavLink>
+          )}
+          {links.map(({ to, label, icon: Icon }) => (
+            <NavLink key={to} to={link(to)} onClick={() => setMenuOpen(false)}>
               <Icon size={18} />
               {label}
             </NavLink>
