@@ -11,6 +11,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<Module> Modules => Set<Module>();
     public DbSet<UserModule> UserModules => Set<UserModule>();
     public DbSet<Entry> Entries => Set<Entry>();
+    public DbSet<Project> Projects => Set<Project>();
+    public DbSet<ProjectModule> ProjectModules => Set<ProjectModule>();
     public DbSet<Problem> ProblemBank => Set<Problem>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
@@ -29,6 +31,31 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
         builder.Entity<Module>(e => { e.ToTable("modules"); e.HasIndex(x => x.Key).IsUnique(); e.Property(x => x.SchemaDefinition).HasColumnType("jsonb"); });
         builder.Entity<UserModule>(e => { e.ToTable("user_modules"); e.HasIndex(x => new { x.UserId, x.ModuleId }).IsUnique(); e.Property(x => x.Config).HasColumnType("jsonb"); e.HasOne<AppUser>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade); e.HasOne<Module>().WithMany().HasForeignKey(x => x.ModuleId); });
         builder.Entity<Entry>(e => { e.ToTable("entries"); e.Property(x => x.Data).HasColumnType("jsonb"); e.HasIndex(x => new { x.UserId, x.LoggedAt }); e.HasOne<AppUser>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade); e.HasOne<Module>().WithMany().HasForeignKey(x => x.ModuleId); });
+        builder.Entity<Project>(e =>
+        {
+            e.ToTable("projects");
+            e.HasAlternateKey(x => new { x.UserId, x.Id });
+            e.HasIndex(x => x.UserId).IsUnique().HasFilter("is_default_interview = true");
+            e.Property(x => x.Name).HasMaxLength(160);
+            e.Property(x => x.Description).HasMaxLength(4000);
+            e.HasOne<AppUser>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+        builder.Entity<ProjectModule>(e =>
+        {
+            e.ToTable("project_modules");
+            e.HasKey(x => new { x.UserId, x.ProjectId, x.ModuleId });
+            e.HasOne<Project>().WithMany().HasForeignKey(x => new { x.UserId, x.ProjectId })
+                .HasPrincipalKey(x => new { x.UserId, x.Id }).OnDelete(DeleteBehavior.Cascade);
+            e.HasOne<Module>().WithMany().HasForeignKey(x => x.ModuleId);
+        });
+        builder.Entity<Entry>(e =>
+        {
+            e.Property(x => x.Title).HasMaxLength(200);
+            e.Property(x => x.Status).HasMaxLength(20);
+            e.HasIndex(x => new { x.UserId, x.ProjectId, x.ModuleId, x.LoggedAt });
+            e.HasIndex(x => new { x.UserId, x.ReviewDueAt });
+            e.HasOne<ProjectModule>().WithMany().HasForeignKey(x => new { x.UserId, x.ProjectId, x.ModuleId });
+        });
         builder.Entity<Problem>(e =>
         {
             e.ToTable("problem_bank");
@@ -47,5 +74,12 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
             SchemaDefinition = """{"problem_attempt":{"problem_bank_id":"uuid","time_spent_minutes":"integer","hints_used":"integer","self_rated_confidence":"integer|null","topic_tags":"string[]"}}"""
         });
         builder.Entity<Problem>().HasData(LeetCodeCatalog.Problems);
+        builder.Entity<Module>().HasData(new Module
+        {
+            Id = ModuleIds.Software,
+            Key = "software",
+            Name = "Software projects",
+            SchemaDefinition = """{"version":1,"milestone":{"notes":"string|null"},"dev_log":{"notes":"string"}}"""
+        });
     }
 }

@@ -32,10 +32,33 @@ public sealed class Entry
     public Guid Id { get; set; } = Guid.NewGuid();
     public Guid UserId { get; set; }
     public Guid ModuleId { get; set; }
+    public Guid ProjectId { get; set; }
+    public int SchemaVersion { get; set; } = 1;
+    public string? Title { get; set; }
+    public string? Status { get; set; }
     public required string EntryType { get; set; }
     public required string Data { get; set; }
     public DateTimeOffset? ReviewDueAt { get; set; }
     public DateTimeOffset LoggedAt { get; set; } = DateTimeOffset.UtcNow;
+}
+
+public sealed class Project
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid UserId { get; set; }
+    public required string Name { get; set; }
+    public string? Description { get; set; }
+    public bool IsArchived { get; set; }
+    public bool IsDefaultInterview { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+}
+
+public sealed class ProjectModule
+{
+    public Guid UserId { get; set; }
+    public Guid ProjectId { get; set; }
+    public Guid ModuleId { get; set; }
+    public bool Enabled { get; set; } = true;
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]

@@ -294,9 +294,27 @@ namespace Modulog.Api.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("module_id");
 
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("project_id");
+
                     b.Property<DateTimeOffset?>("ReviewDueAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("review_due_at");
+
+                    b.Property<int>("SchemaVersion")
+                        .HasColumnType("integer")
+                        .HasColumnName("schema_version");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("title");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -310,6 +328,12 @@ namespace Modulog.Api.Data.Migrations
 
                     b.HasIndex("UserId", "LoggedAt")
                         .HasDatabaseName("ix_entries_user_id_logged_at");
+
+                    b.HasIndex("UserId", "ReviewDueAt")
+                        .HasDatabaseName("ix_entries_user_id_review_due_at");
+
+                    b.HasIndex("UserId", "ProjectId", "ModuleId", "LoggedAt")
+                        .HasDatabaseName("ix_entries_user_id_project_id_module_id_logged_at");
 
                     b.ToTable("entries", (string)null);
                 });
@@ -352,6 +376,13 @@ namespace Modulog.Api.Data.Migrations
                             Key = "leetcode",
                             Name = "LeetCode",
                             SchemaDefinition = "{\"problem_attempt\":{\"problem_bank_id\":\"uuid\",\"time_spent_minutes\":\"integer\",\"hints_used\":\"integer\",\"self_rated_confidence\":\"integer|null\",\"topic_tags\":\"string[]\"}}"
+                        },
+                        new
+                        {
+                            Id = new Guid("10000000-0000-0000-0000-000000000002"),
+                            Key = "software",
+                            Name = "Software projects",
+                            SchemaDefinition = "{\"version\":1,\"milestone\":{\"notes\":\"string|null\"},\"dev_log\":{\"notes\":\"string\"}}"
                         });
                 });
 
@@ -19343,6 +19374,81 @@ namespace Modulog.Api.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Modulog.Api.Domain.Project", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)")
+                        .HasColumnName("description");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_archived");
+
+                    b.Property<bool>("IsDefaultInterview")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_default_interview");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("character varying(160)")
+                        .HasColumnName("name");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_projects");
+
+                    b.HasAlternateKey("UserId", "Id")
+                        .HasName("ak_projects_user_id_id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_projects_user_id")
+                        .HasFilter("is_default_interview = true");
+
+                    b.ToTable("projects", (string)null);
+                });
+
+            modelBuilder.Entity("Modulog.Api.Domain.ProjectModule", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("project_id");
+
+                    b.Property<Guid>("ModuleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("module_id");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("boolean")
+                        .HasColumnName("enabled");
+
+                    b.HasKey("UserId", "ProjectId", "ModuleId")
+                        .HasName("pk_project_modules");
+
+                    b.HasIndex("ModuleId")
+                        .HasDatabaseName("ix_project_modules_module_id");
+
+                    b.ToTable("project_modules", (string)null);
+                });
+
             modelBuilder.Entity("Modulog.Api.Domain.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -19497,6 +19603,41 @@ namespace Modulog.Api.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_entries_users_user_id");
+
+                    b.HasOne("Modulog.Api.Domain.ProjectModule", null)
+                        .WithMany()
+                        .HasForeignKey("UserId", "ProjectId", "ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_entries_project_modules_user_id_project_id_module_id");
+                });
+
+            modelBuilder.Entity("Modulog.Api.Domain.Project", b =>
+                {
+                    b.HasOne("Modulog.Api.Domain.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_projects_users_user_id");
+                });
+
+            modelBuilder.Entity("Modulog.Api.Domain.ProjectModule", b =>
+                {
+                    b.HasOne("Modulog.Api.Domain.Module", null)
+                        .WithMany()
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_project_modules_modules_module_id");
+
+                    b.HasOne("Modulog.Api.Domain.Project", null)
+                        .WithMany()
+                        .HasForeignKey("UserId", "ProjectId")
+                        .HasPrincipalKey("UserId", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_project_modules_projects_user_id_project_id");
                 });
 
             modelBuilder.Entity("Modulog.Api.Domain.RefreshToken", b =>
